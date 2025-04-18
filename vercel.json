@@ -1,0 +1,12 @@
+{
+    "rewrites": [
+        {
+            "source": "/confirmar-cuenta/:token",
+            "destination": "/index.html"
+        },
+        {
+            "source": "/olvide-password/:token",
+            "destination": "/index.html"
+        }
+    ]
+}
