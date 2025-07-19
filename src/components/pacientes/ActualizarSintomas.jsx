@@ -1,20 +1,18 @@
-import { ToastContainer, toast } from "react-toastify";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { ToastContainer, toast } from "react-toastify";
 import Skeleton from "react-loading-skeleton";
-import NavbarAdmin from "./NavbarAdmin";
-import clienteAxios from "../config/axios";
+import clienteAxios from "../../config/axios";
+import NavbarAdmin from "../navbar/NavbarAdmin";
 import "react-toastify/dist/ReactToastify.css";
 import "react-loading-skeleton/dist/skeleton.css";
 
-const PerfilPaciente = () => {
-  const navigate = useNavigate();
+const ActualizarSintomas = () => {
   const { id } = useParams();
-  const [eliminando, setEliminando] = useState(false);
+  const navigate = useNavigate();
   const [cargando, setCargando] = useState(false);
-  const [formData, setFormData] = useState({
-    id: "",
+  const [paciente, setPaciente] = useState({
     nombre: "",
     apellido: "",
     edad: "",
@@ -22,23 +20,21 @@ const PerfilPaciente = () => {
     sexo: "",
     email: "",
     telefono: "",
-    medicacion: "",
     sintomas: "",
-    cobertura: "",
+    medicacion: "",
   });
 
   const obtenerPaciente = async () => {
     try {
       const token = localStorage.getItem("token");
-
-      const { data } = await clienteAxios.get(`pacienteId/${id}`, {
+      const url = `/pacienteId/${id}`;
+      const { data } = await clienteAxios.get(url, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
 
-      setFormData({
-        id: data.paciente[0].id,
+      setPaciente({
         nombre: data.paciente[0].nombre || "",
         apellido: data.paciente[0].apellido || "",
         edad: data.paciente[0].edad || "",
@@ -46,53 +42,55 @@ const PerfilPaciente = () => {
         sexo: data.paciente[0].sexo || "",
         email: data.paciente[0].email || "",
         telefono: data.paciente[0].telefono || "",
-        cobertura: data.paciente[0].cobertura || "Sin cobertura",
+        sintomas: data.paciente[0].sintomas || "",
+        medicacion: data.paciente[0].medicacion || "",
       });
     } catch (error) {
-      toast.error("Ha ocurrido un error");
+      toast.error("Error al obtener el paciente");
     }
   };
 
-  const eliminarPaciente = async () => {
-    setCargando(true);
-    try {
-      const token = localStorage.getItem("token");
-      const url = `/eliminar-paciente/${id}`;
+  const handleChange = (e) => {
+    setPaciente({ ...paciente, [e.target.name]: e.target.value });
+  };
 
-      const { data } = await clienteAxios.delete(url, {
+  const actualizarPaciente = async (e) => {
+    e.preventDefault();
+    try {
+      setCargando(true);
+      toast.loading("Actualizando Sintomas...", {
+        position: "top-center",
+      });
+      const token = localStorage.getItem("token");
+      const url = `/actualizar-paciente/${id}`;
+      const config = {
         headers: {
+          "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-      });
+      };
+
+      const { data } = await clienteAxios.put(
+        url,
+        JSON.stringify(paciente),
+        config
+      );
 
       if (data.ok === true) {
-        toast.success("Paciente eliminado correctamente", {
-          position: "top-center",
-        });
         setTimeout(() => {
           navigate("/admin/pacientes");
-        }, 2500);
+        }, 1000);
       } else {
-        setCargando(false);
         toast.error(data.msg);
       }
     } catch (error) {
       setCargando(false);
-      toast.error("Ocurrió un error");
+      toast.error("Ha acorrido un error");
     }
   };
 
-  const handleEliminar = (e) => {
-    e.preventDefault();
-    setEliminando(true);
-  };
-
-  const handleCancelar = () => {
-    setEliminando(false);
-  };
-
   const handleNavigate = () => {
-    navigate(`/admin/pacientes`);
+    navigate(`/admin/pacientes/perfilPaciente/${id}`);
   };
 
   useEffect(() => {
@@ -102,7 +100,6 @@ const PerfilPaciente = () => {
   return (
     <>
       <NavbarAdmin />
-      <ToastContainer />
       <button
         className="mt-4 ms-4 bg-slate-500 p-2 rounded hover:bg-slate-400"
         onClick={handleNavigate}
@@ -111,29 +108,28 @@ const PerfilPaciente = () => {
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
           viewBox="20 20"
-          strokeWidth="2"
+          stroke-width="2"
           stroke={"#fff"}
           className="size-6"
         >
           <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
+            stroke-linecap="round"
+            stroke-linejoin="round"
             d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18"
           />
         </svg>
       </button>
-
       <div className="max-w-4xl mx-4 lg:mx-auto bg-white p-8 rounded-md shadow-md mt-10">
         <h2 className="text-2xl font-bold mb-6 text-gray-800 text-center">
-          Perfil del Paciente
+          Actualizar Sintomas
         </h2>
-        <form className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <form className="flex flex-col lg:grid md:grid-cols-2 gap-6">
           <div>
             <label className="block text-sm font-medium text-gray-700">
               Nombre
             </label>
             <h2 className="mt-1 p-2 block w-full rounded-md border-gray-300 bg-slate-100 shadow-md focus:outline-none sm:text-sm">
-              {formData.nombre || <Skeleton />}
+              {paciente.nombre || <Skeleton />}
             </h2>
           </div>
 
@@ -142,7 +138,7 @@ const PerfilPaciente = () => {
               Apellido
             </label>
             <h2 className="mt-1 p-2 block w-full rounded-md border-gray-300 bg-slate-100 shadow-md focus:outline-none sm:text-sm">
-              {formData.apellido || <Skeleton />}
+              {paciente.apellido || <Skeleton />}
             </h2>
           </div>
 
@@ -151,7 +147,7 @@ const PerfilPaciente = () => {
               Edad
             </label>
             <h2 className="mt-1 p-2 block w-full rounded-md border-gray-300 bg-slate-100 shadow-md focus:outline-none sm:text-sm">
-              {formData.edad || <Skeleton />}
+              {paciente.edad || <Skeleton />}
             </h2>
           </div>
 
@@ -160,7 +156,7 @@ const PerfilPaciente = () => {
               Teléfono
             </label>
             <h2 className="mt-1 p-2 block w-full rounded-md border-gray-300 bg-slate-100 shadow-md focus:outline-none sm:text-sm">
-              {formData.telefono || <Skeleton />}
+              {paciente.telefono || <Skeleton />}
             </h2>
           </div>
 
@@ -169,7 +165,7 @@ const PerfilPaciente = () => {
               DNI
             </label>
             <h2 className="mt-1 p-2 block w-full rounded-md border-gray-300 bg-slate-100 shadow-md focus:outline-none sm:text-sm">
-              {formData.dni || <Skeleton />}
+              {paciente.dni || <Skeleton />}
             </h2>
           </div>
 
@@ -178,7 +174,7 @@ const PerfilPaciente = () => {
               Sexo
             </label>
             <h2 className="mt-1 p-2 block w-full rounded-md border-gray-300 bg-slate-100 shadow-md focus:outline-none sm:text-sm">
-              {formData.sexo || <Skeleton />}
+              {paciente.sexo || <Skeleton />}
             </h2>
           </div>
 
@@ -187,79 +183,51 @@ const PerfilPaciente = () => {
               Email
             </label>
             <h2 className="mt-1 p-2 block w-full rounded-md border-gray-300 bg-slate-100 shadow-md focus:outline-none sm:text-sm">
-              {formData.email || <Skeleton />}
+              {paciente.email || <Skeleton />}
             </h2>
           </div>
 
           <div className="md:col-span-2">
             <label className="block text-sm font-medium text-gray-700">
-              Cobertura
+              Medicacion
             </label>
-            <h2 className="mt-1 p-2 block w-full rounded-md border-gray-300 bg-slate-100 shadow-md focus:outline-none sm:text-sm">
-              {formData.cobertura || <Skeleton />}
-            </h2>
+            <textarea
+              name="medicacion"
+              type="text"
+              onChange={(e) => handleChange(e)}
+              value={paciente.medicacion || <Skeleton />}
+              className="mt-1 p-2 block w-full rounded-md border-gray-300 bg-slate-100 shadow-md focus:outline-none sm:text-sm"
+            />
           </div>
 
-          <div className="flex gap-4 justify-evenly mt-5 md:col-span-2">
-            <button
-              className="w-96 text-sm bg-gray-600 hover:bg-gray-800 text-white py-2 px-4 rounded-md"
-              onClick={() => navigate(`/admin/pacientes/editar/${formData.id}`)}
-            >
-              Editar Paciente
-            </button>
-
-            <button
-              className="w-96 text-sm bg-blue-500 hover:bg-blue-600 text-white py-2 px-4  rounded-md"
-              onClick={() =>
-                navigate(`/admin/pacientes/historial/${formData.id}`)
-              }
-            >
-              Ver Historial
-            </button>
-
-            <button
-              className="w-96 text-sm bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded-md"
-              onClick={(e) => handleEliminar(e)}
-            >
-              Eliminar Paciente
-            </button>
+          <div className="md:col-span-2">
+            <label className="block text-sm font-medium text-gray-700">
+              Sintomas
+            </label>
+            <textarea
+              name="sintomas"
+              type="text"
+              rows={4}
+              onChange={(e) => handleChange(e)}
+              value={paciente.sintomas || <Skeleton />}
+              className="mt-1 p-2 block w-full rounded-md border-gray-300 bg-slate-100 shadow-md focus:outline-none sm:text-sm"
+            />
           </div>
+
+          <button
+            onClick={(e) => actualizarPaciente(e)}
+            disabled={cargando}
+            type="submit"
+            className={`col-span-2 w-full bg-indigo-600 py-2 px-4 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500  text-white p-2 mt-5 ${
+              cargando ? "opacity-50 cursor-not-allowed" : "hover:bg-blue-600"
+            }`}
+          >
+            {cargando ? "Guardando..." : "Guardar Cambios"}
+          </button>
         </form>
-
-        {eliminando && (
-          <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-            <div className="p-6 bg-white shadow-lg rounded-lg w-96 mx-4">
-              <p className="text-gray-800 mb-4 text-center font-semibold">
-                ¿Estás seguro de que quieres eliminar este paciente?
-              </p>
-              <div className="flex justify-center gap-4">
-                <button
-                  type="submit"
-                  disabled={cargando}
-                  onClick={eliminarPaciente}
-                  className={`px-4 py-2 rounded-lg transition text-white 
-                    ${
-                      cargando
-                        ? "bg-gray-400 cursor-not-allowed"
-                        : "bg-red-500 hover:bg-red-600"
-                    }`}
-                >
-                  {cargando ? "Eliminando..." : "Eliminar"}
-                </button>
-                <button
-                  className="px-4 py-2 bg-gray-300 text-gray-800 rounded-lg hover:bg-gray-400 transition"
-                  onClick={handleCancelar}
-                  disabled={cargando}
-                >
-                  Cancelar
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
       </div>
     </>
   );
 };
 
-export default PerfilPaciente;
+export default ActualizarSintomas;

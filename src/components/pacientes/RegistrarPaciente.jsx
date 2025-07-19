@@ -1,8 +1,8 @@
 import { ToastContainer, toast } from "react-toastify";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import clienteAxios from "../config/axios";
-import NavbarAdmin from "./NavbarAdmin";
+import clienteAxios from "../../config/axios";
+import NavbarAdmin from "../navbar/NavbarAdmin";
 import "react-toastify/dist/ReactToastify.css";
 
 const RegistrarPaciente = () => {
@@ -60,7 +60,6 @@ const RegistrarPaciente = () => {
   return (
     <>
       <NavbarAdmin />
-      <ToastContainer />
       <button
         className="mt-4 ms-4 bg-slate-500 p-2 rounded hover:bg-slate-400"
         onClick={handleNavigate}

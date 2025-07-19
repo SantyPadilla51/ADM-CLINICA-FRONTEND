@@ -1,7 +1,7 @@
 import Examenes from "./Examenes.jsx";
 import Historial from "./Historial.jsx";
 import Informacion from "./Informacion.jsx";
-import NavbarAdmin from "../../NavbarAdmin.jsx";
+import NavbarAdmin from "../navbar/NavbarAdmin.jsx";
 import { useNavigate, useParams } from "react-router-dom";
 
 const HistorialPaciente = () => {

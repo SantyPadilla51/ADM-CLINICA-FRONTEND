@@ -3,8 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ClipLoader from "react-spinners/ClipLoader";
-import Navbar from "./Navbar";
-import clienteAxios from "../config/axios";
+import Navbar from "../navbar/Navbar";
+import clienteAxios from "../../config/axios";
 
 const RegistrarUser = () => {
   const [cargando, setCargando] = useState(false);
@@ -57,7 +57,6 @@ const RegistrarUser = () => {
   return (
     <>
       <Navbar />
-      <ToastContainer />
       <div className="bg-gray-100">
         <button
           className="mt-4 ms-4 mb-4 md:mb-0 lg:mb-0 bg-slate-500 p-2 rounded hover:bg-slate-400"
