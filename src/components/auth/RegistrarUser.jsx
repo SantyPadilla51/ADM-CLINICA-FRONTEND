@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ClipLoader from "react-spinners/ClipLoader";
 import Navbar from "../navbar/Navbar";
@@ -57,142 +57,118 @@ const RegistrarUser = () => {
   return (
     <>
       <Navbar />
-      <div className="bg-gray-100">
+      <div className="min-h-screen bg-gradient-to-br from-gray-100 to-gray-300 flex flex-col items-start">
         <button
-          className="mt-4 ms-4 mb-4 md:mb-0 lg:mb-0 bg-slate-500 p-2 rounded hover:bg-slate-400"
           onClick={handleNavigate}
+          className="m-4 flex items-center gap-2 text-slate-600 hover:text-slate-800 transition"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
-            viewBox="20 20"
-            stroke-width="2"
-            stroke={"#fff"}
-            className="size-6"
+            viewBox="0 0 24 24"
+            strokeWidth={2}
+            stroke="currentColor"
+            className="w-6 h-6"
           >
             <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
+              strokeLinecap="round"
+              strokeLinejoin="round"
               d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18"
             />
           </svg>
+          <span className="font-semibold">Volver</span>
         </button>
-      </div>
-      <div className="min-h-screen flex items-center justify-center bg-gray-100">
-        <form
-          className="mt-10 mx-4 drop-shadow-lg bg-gray-100 flex flex-col p-6 gap-4 rounded-lg lg:w-1/3 lg:mx-auto border border-gray-200"
-          onSubmit={handleSubmit}
-        >
-          <h3 className="text-xl font-bold bg-white p-3 rounded-md text-center uppercase">
-            Completa todos los campos
-          </h3>
 
-          <div className="flex flex-col">
-            <label className="font-semibold">Nombre:</label>
-            <input
-              className="p-2 bg-white rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              type="text"
-              name="nombre"
-              required
-              onChange={handleChange}
-            />
-          </div>
+        <div className="flex-grow w-full flex items-center justify-center">
+          <form
+            onSubmit={handleSubmit}
+            className="w-full max-w-lg bg-white rounded-xl shadow-xl p-8 space-y-6 mx-4"
+          >
+            <h3 className="text-2xl font-bold text-center text-gray-800">
+              Registro de Usuario
+            </h3>
 
-          <div className="flex flex-col">
-            <label className="font-semibold">Apellido:</label>
-            <input
-              className="p-2 bg-white rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              type="text"
-              name="apellido"
-              required
-              onChange={handleChange}
-            />
-          </div>
+            {[
+              { label: "Nombre", name: "nombre", type: "text" },
+              { label: "Apellido", name: "apellido", type: "text" },
+              {
+                label: "DNI",
+                name: "dni",
+                type: "text",
+                minLength: 8,
+                maxLength: 8,
+              },
+              {
+                label: "Correo electrónico",
+                name: "email",
+                type: "email",
+              },
+              {
+                label: "Teléfono",
+                name: "telefono",
+                type: "text",
+                minLength: 10,
+                maxLength: 10,
+              },
+              {
+                label: "Contraseña",
+                name: "password",
+                type: "password",
+              },
+            ].map(({ label, name, type, minLength, maxLength }) => (
+              <div className="flex flex-col" key={name}>
+                <label className="font-medium text-gray-700 mb-1">
+                  {label}
+                </label>
+                <input
+                  type={type}
+                  name={name}
+                  minLength={minLength}
+                  maxLength={maxLength}
+                  required
+                  onChange={handleChange}
+                  className="p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none bg-gray-50"
+                />
+              </div>
+            ))}
 
-          <div className="flex flex-col">
-            <label className="font-semibold">DNI:</label>
-            <input
-              className="p-2 bg-white rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              type="text"
-              minLength={8}
-              maxLength={8}
-              name="dni"
-              required
-              onChange={handleChange}
-            />
-          </div>
+            <div className="flex flex-col">
+              <label className="font-medium text-gray-700 mb-1">
+                Especialidad
+              </label>
+              <select
+                name="especialidad"
+                required
+                onChange={handleChange}
+                className="p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none bg-gray-50"
+              >
+                <option value="">Seleccione una especialidad</option>
+                <option value="cardiología">Cardiología</option>
+                <option value="traumatologia">Traumatología</option>
+                <option value="neurología">Neurología</option>
+                <option value="oncología">Oncología</option>
+                <option value="pediatría">Pediatría</option>
+                <option value="psiquiatría">Psiquiatría</option>
+                <option value="urología">Urología</option>
+                <option value="otros">Otros</option>
+              </select>
+            </div>
 
-          <div className="flex flex-col">
-            <label className="font-semibold">Especialidad:</label>
-            <select
-              className="p-2 bg-white rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              name="especialidad"
-              required
-              onChange={handleChange}
-            >
-              <option value="">Seleccione una especialidad</option>
-              <option value="cardiología">Cardiología</option>
-              <option value="traumatologia">Traumatología</option>
-              <option value="neurología">Neurología</option>
-              <option value="oncología">Oncología</option>
-              <option value="pediatría">Pediatría</option>
-              <option value="psiquiatría">Psiquiatría</option>
-              <option value="urología">Urología</option>
-              <option value="otros">Otros</option>
-            </select>
-          </div>
-
-          <div className="flex flex-col">
-            <label className="font-semibold">Correo electrónico:</label>
-            <input
-              className="p-2 bg-white rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              type="email"
-              name="email"
-              required
-              onChange={handleChange}
-            />
-          </div>
-
-          <div className="flex flex-col">
-            <label className="font-semibold">Teléfono:</label>
-            <input
-              className="p-2 bg-white rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              type="text"
-              name="telefono"
-              minLength={10}
-              maxLength={10}
-              required
-              onChange={handleChange}
-            />
-          </div>
-
-          <div className="flex flex-col">
-            <label className="font-semibold">Contraseña:</label>
-            <input
-              className="p-2 bg-white rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              type="password"
-              name="password"
-              required
-              onChange={handleChange}
-            />
-          </div>
-
-          {cargando ? (
-            <button
-              className="rounded-md bg-blue-800 text-white p-3 hover:bg-blue-600 mt-5 flex items-center justify-center"
-              type="submit"
-            >
-              <ClipLoader color={"#fff"} size={20} />
-            </button>
-          ) : (
-            <button
-              className="rounded-md bg-blue-800 text-white p-3 hover:bg-blue-600 mt-5 transition-all duration-200"
-              type="submit"
-            >
-              Crear Usuario
-            </button>
-          )}
-        </form>
+            <div>
+              <button
+                type="submit"
+                className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg text-lg font-semibold flex items-center justify-center transition duration-200"
+                disabled={cargando}
+              >
+                {cargando ? (
+                  <ClipLoader color="#fff" size={20} />
+                ) : (
+                  "Crear Usuario"
+                )}
+              </button>
+            </div>
+          </form>
+        </div>
       </div>
     </>
   );

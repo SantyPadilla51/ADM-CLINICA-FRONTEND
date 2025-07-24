@@ -1,4 +1,4 @@
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import clienteAxios from "../../config/axios";
@@ -27,7 +27,7 @@ const RegistrarPaciente = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setCargando(true);
-    toast.loading("Guardando Paciente");
+    const toastID = toast.loading("Guardando Paciente");
     try {
       const token = localStorage.getItem("token");
       const url = "/crear-paciente";
@@ -41,6 +41,12 @@ const RegistrarPaciente = () => {
 
       if (data.ok === true) {
         setCargando(false);
+        toast.update(toastID, {
+          render: "Paciente registrado correctamente",
+          type: "success",
+          isLoading: false,
+          autoClose: 2000,
+        });
         setTimeout(() => {
           navigate("/admin/pacientes");
         }, 1500);

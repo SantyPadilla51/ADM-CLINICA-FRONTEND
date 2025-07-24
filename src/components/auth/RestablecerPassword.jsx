@@ -2,7 +2,7 @@ import { useState } from "react";
 import ClipLoader from "react-spinners/ClipLoader";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../navbar/Navbar";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import clienteAxios from "../../config/axios";
 

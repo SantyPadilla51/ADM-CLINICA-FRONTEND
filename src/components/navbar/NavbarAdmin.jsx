@@ -1,16 +1,20 @@
 import { useNavigate } from "react-router-dom";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const NavbarAdmin = () => {
   const navigate = useNavigate();
   const cerrarSesion = (e) => {
     e.preventDefault();
+    const toastID = toast.loading("Cerrando Sesion");
     const borrarToken = localStorage.removeItem("token");
 
     if (borrarToken === undefined) {
-      toast.loading("Cerrando Sesion", {
-        position: "top-center",
+      toast.update(toastID, {
+        render: "Sesión cerrada correctamente",
+        type: "success",
+        isLoading: false,
+        autoClose: 2000,
       });
       setTimeout(() => {
         navigate("/");

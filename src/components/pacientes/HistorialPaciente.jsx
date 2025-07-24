@@ -34,9 +34,9 @@ const HistorialPaciente = () => {
           />
         </svg>
       </button>
-      <section className="grid grid-cols-3 ">
-        <Historial pacienteID={id} />
+      <section className="flex flex-col lg:grid lg:grid-cols-3 ">
         <Informacion pacienteID={id} />
+        <Historial pacienteID={id} />
         <Examenes pacienteID={id} />
       </section>
     </>

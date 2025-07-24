@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import Skeleton from "react-loading-skeleton";
 import clienteAxios from "../../config/axios";
 import NavbarAdmin from "../navbar/NavbarAdmin";
