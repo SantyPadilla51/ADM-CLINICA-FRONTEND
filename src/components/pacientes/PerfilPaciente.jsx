@@ -182,16 +182,16 @@ const PerfilPaciente = () => {
             </h2>
           </div>
 
-          <div className="flex gap-4 justify-evenly mt-5 md:col-span-2">
+          <div className="flex flex-col lg:flex-row md:gap-4 lg:gap-4 lg:justify-between mt-5 md:col-span-2">
             <button
-              className="w-96 text-sm bg-gray-600 hover:bg-gray-800 text-white py-2 px-4 rounded-md"
+              className="w-full mb-4 lg:w-52 text-sm bg-gray-600 hover:bg-gray-800 text-white py-2 px-4 rounded-md"
               onClick={() => navigate(`/admin/pacientes/editar/${formData.id}`)}
             >
               Editar Paciente
             </button>
 
             <button
-              className="w-96 text-sm bg-blue-500 hover:bg-blue-600 text-white py-2 px-4  rounded-md"
+              className="w-full mb-4 lg:w-52 text-sm bg-blue-500 hover:bg-blue-600 text-white py-2 px-4  rounded-md"
               onClick={() =>
                 navigate(`/admin/pacientes/historial/${formData.id}`)
               }
@@ -200,7 +200,7 @@ const PerfilPaciente = () => {
             </button>
 
             <button
-              className="w-96 text-sm bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded-md"
+              className="w-full mb-4 lg:w-52 text-sm bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded-md"
               onClick={(e) => handleEliminar(e)}
             >
               Eliminar Paciente
