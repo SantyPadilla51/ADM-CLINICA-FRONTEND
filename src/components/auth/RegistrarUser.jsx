@@ -5,6 +5,7 @@ import "react-toastify/dist/ReactToastify.css";
 import ClipLoader from "react-spinners/ClipLoader";
 import Navbar from "../navbar/Navbar";
 import clienteAxios from "../../config/axios";
+import BtnVolver from "../ui/BtnVolver";
 
 const RegistrarUser = () => {
   const [cargando, setCargando] = useState(false);
@@ -58,26 +59,7 @@ const RegistrarUser = () => {
     <>
       <Navbar />
       <div className="min-h-screen bg-gradient-to-br from-gray-100 to-gray-300 flex flex-col items-start">
-        <button
-          onClick={handleNavigate}
-          className="m-4 flex items-center gap-2 text-slate-600 hover:text-slate-800 transition"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth={2}
-            stroke="currentColor"
-            className="w-6 h-6"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18"
-            />
-          </svg>
-          <span className="font-semibold">Volver</span>
-        </button>
+        <BtnVolver onClick={handleNavigate} />
 
         <div className="flex-grow w-full flex items-center justify-center">
           <form

@@ -7,6 +7,7 @@ import NavbarAdmin from "../navbar/NavbarAdmin";
 import clienteAxios from "../../config/axios";
 import "react-toastify/dist/ReactToastify.css";
 import "react-loading-skeleton/dist/skeleton.css";
+import BtnVolver from "../ui/BtnVolver";
 
 const PerfilPaciente = () => {
   const navigate = useNavigate();
@@ -102,25 +103,7 @@ const PerfilPaciente = () => {
   return (
     <>
       <NavbarAdmin />
-      <button
-        className="mt-4 ms-4 bg-slate-500 p-2 rounded hover:bg-slate-400"
-        onClick={handleNavigate}
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="20 20"
-          strokeWidth="2"
-          stroke={"#fff"}
-          className="size-6"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18"
-          />
-        </svg>
-      </button>
+      <BtnVolver onClick={handleNavigate} />
 
       <div className="max-w-4xl mx-4 lg:mx-auto bg-white p-8 rounded-md shadow-md mt-4 mb-10">
         <h2 className="text-2xl font-bold mb-6 text-gray-800 text-center">

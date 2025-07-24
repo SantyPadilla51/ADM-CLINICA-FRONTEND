@@ -3,6 +3,7 @@ import Historial from "./Historial.jsx";
 import Informacion from "./Informacion.jsx";
 import NavbarAdmin from "../navbar/NavbarAdmin.jsx";
 import { useNavigate, useParams } from "react-router-dom";
+import BtnVolver from "../ui/BtnVolver.jsx";
 
 const HistorialPaciente = () => {
   const { id } = useParams();
@@ -15,25 +16,8 @@ const HistorialPaciente = () => {
   return (
     <>
       <NavbarAdmin />
-      <button
-        className="mt-4 ms-4 bg-slate-500 p-2 rounded hover:bg-slate-400"
-        onClick={handleNavigate}
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="20 20"
-          strokeWidth="2"
-          stroke={"#fff"}
-          className="size-6"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18"
-          />
-        </svg>
-      </button>
+      <BtnVolver onClick={handleNavigate} />
+
       <section className="flex flex-col lg:grid lg:grid-cols-3 ">
         <Informacion pacienteID={id} />
         <Historial pacienteID={id} />
