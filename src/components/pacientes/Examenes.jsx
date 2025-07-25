@@ -7,6 +7,7 @@ import "react-toastify/dist/ReactToastify.css";
 const Examenes = ({ pacienteID }) => {
   const [examenes, setExamenes] = useState([]);
   const [eliminando, setEliminando] = useState(false);
+  const [examenSeleccionado, setExamenSeleccionado] = useState(null);
   const [cargandoEliminar, setCargandoEliminar] = useState(false);
   const [addExamen, setAddExamen] = useState(null);
   const [cargando, setCargando] = useState(false);
@@ -35,9 +36,9 @@ const Examenes = ({ pacienteID }) => {
     setCargandoEliminar(false);
   };
 
-  const handleEliminar = () => {
+  const handleEliminar = (examen) => {
+    setExamenSeleccionado(examen);
     setEliminando(true);
-    setCargandoEliminar(false);
   };
 
   const deleteExamen = async (examenId) => {
@@ -45,25 +46,36 @@ const Examenes = ({ pacienteID }) => {
     setCargandoEliminar(true);
     try {
       const token = localStorage.getItem("token");
-      await clienteAxios.delete(`/pacientes/examenes/${examenId}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const { data } = await clienteAxios.delete(
+        `/pacientes/examenes/${examenId}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
 
-      toast.success("Examen eliminado correctamente");
-      getExamenes();
+      if (data.ok == true) {
+        toast.success("Examen eliminado correctamente");
+        getExamenes();
+        setCargando(false);
+        setEliminando(false);
+        return;
+      }
     } catch (error) {
-      console.error(error);
       toast.error("Error al eliminar el examen");
     }
     setCargandoEliminar(false);
     setEliminando(false);
-    const listExamens = examenes.filter((examen) => examen.id != examenId);
-    setExamenes(listExamens);
+    setCargando(false);
   };
 
   const createExamen = async (e) => {
     e.preventDefault();
     setCargando(true);
+    if (nuevoExamen.imagen === "") {
+      toast.error("Por favor, sube una imagen del examen");
+      setCargando(false);
+      return;
+    }
 
     try {
       const file = nuevoExamen.imagen;
@@ -75,7 +87,6 @@ const Examenes = ({ pacienteID }) => {
 
       if (error) throw error;
 
-      // Obtener URL pública
       const { data: publicUrlData } = supabase.storage
         .from("examenes")
         .getPublicUrl(`imagenes/${fileName}`);
@@ -102,6 +113,7 @@ const Examenes = ({ pacienteID }) => {
       toast.success("Examen creado correctamente");
       setNuevoExamen("");
       setAddExamen(false);
+      setCargando(false);
       getExamenes();
     } catch (error) {
       toast.error("Error al subir el examen");
@@ -191,6 +203,38 @@ const Examenes = ({ pacienteID }) => {
           </div>
         </div>
       )}
+      {eliminando && examenSeleccionado && (
+        <div className="z-40 fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="p-6 bg-white shadow-lg rounded-lg w-96">
+            <p className="text-gray-800 mb-4 text-center font-semibold">
+              ¿Estás seguro de que quieres eliminar esta consulta?
+            </p>
+            <div className="flex justify-center gap-4">
+              <button
+                type="submit"
+                disabled={cargandoEliminar}
+                onClick={() =>
+                  deleteExamen(
+                    examenSeleccionado.id,
+                    examenSeleccionado.imagenUrl
+                  )
+                }
+                className="bg-red-600 hover:bg-red-500 px-4 py-2 rounded-lg transition text-white"
+              >
+                {cargandoEliminar ? "Eliminando..." : "Eliminar"}
+              </button>
+
+              <button
+                className="px-4 py-2 bg-gray-300 text-gray-800 rounded-lg hover:bg-gray-400 transition"
+                onClick={handleCancelar}
+                disabled={cargandoEliminar}
+              >
+                Cancelar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       <section className="p-6 row-start-1">
         <div className="flex justify-between items-center mb-6">
@@ -212,36 +256,6 @@ const Examenes = ({ pacienteID }) => {
             <div className="space-y-4">
               {examenes.map((examen, index) => (
                 <>
-                  {eliminando && (
-                    <div className="z-40 fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-                      <div className="p-6 bg-white shadow-lg rounded-lg w-96">
-                        <p className="text-gray-800 mb-4 text-center font-semibold">
-                          ¿Estás seguro de que quieres eliminar esta consulta?
-                        </p>
-                        <div className="flex justify-center gap-4">
-                          <button
-                            type="submit"
-                            disabled={cargandoEliminar}
-                            onClick={() => {
-                              deleteExamen(examen.id, examen.imagenUrl);
-                            }}
-                            className="bg-red-600 hover:bg-red-500 px-4 py-2 rounded-lg transition text-white"
-                          >
-                            {cargandoEliminar ? "Eliminando..." : "Eliminar"}
-                          </button>
-
-                          <button
-                            className="px-4 py-2 bg-gray-300 text-gray-800 rounded-lg hover:bg-gray-400 transition"
-                            onClick={handleCancelar}
-                            disabled={cargandoEliminar}
-                          >
-                            Cancelar
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  )}
-
                   <div
                     key={index}
                     className="relative bg-white border border-gray-300 p-4"
@@ -251,7 +265,7 @@ const Examenes = ({ pacienteID }) => {
                       <span className="font-light">{examen.descripcion}</span>{" "}
                     </p>
                     <button
-                      onClick={handleEliminar}
+                      onClick={() => handleEliminar(examen)}
                       className="absolute right-2 top-2 p-1 rounded-lg hover:bg-red-200"
                     >
                       <svg
