@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import clienteAxios from "../../config/axios";
 import NavbarAdmin from "../navbar/NavbarAdmin";
 import "react-toastify/dist/ReactToastify.css";
-import BtnVolver from "../btnVolver/BtnVolver";
+import BtnVolver from "../ui/BtnVolver";
 
 const RegistrarPaciente = () => {
   const [cargando, setCargando] = useState(false);
