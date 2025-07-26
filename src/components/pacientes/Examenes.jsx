@@ -207,7 +207,7 @@ const Examenes = ({ pacienteID }) => {
         <div className="z-40 fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
           <div className="p-6 bg-white shadow-lg rounded-lg w-96">
             <p className="text-gray-800 mb-4 text-center font-semibold">
-              ¿Estás seguro de que quieres eliminar esta consulta?
+              ¿Estás seguro de que quieres eliminar este examen?
             </p>
             <div className="flex justify-center gap-4">
               <button
