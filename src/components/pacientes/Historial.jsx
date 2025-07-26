@@ -25,7 +25,9 @@ const Historial = ({ pacienteID }) => {
         headers: { Authorization: `Bearer ${token}` },
       });
 
-      setConsultas(data.historial);
+      const historialOrdenado = data.historial.sort((a, b) => b.id - a.id);
+
+      setConsultas(historialOrdenado);
       setCargando(false);
     } catch (error) {
       toast.error("Hubo un error al obtener el historial");
@@ -120,7 +122,7 @@ const Historial = ({ pacienteID }) => {
     <>
       {addConsulta ? (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="relative bg-white p-6 rounded-2xl shadow-xl w-full max-w-md">
+          <div className="relative bg-white p-6 rounded-2xl shadow-xl w-full max-w-2xl">
             <button
               onClick={() => setAddConsulta(null)}
               className="absolute top-4 right-4 text-gray-500 hover:text-gray-700 transition"
@@ -147,7 +149,7 @@ const Historial = ({ pacienteID }) => {
               Nueva Consulta
             </h2>
 
-            <form onSubmit={createConsulta} className="space-y-4">
+            <form onSubmit={createConsulta} className=" space-y-4 ">
               <div>
                 <p>Motivo</p>
                 <textarea
@@ -160,6 +162,7 @@ const Historial = ({ pacienteID }) => {
                       motivo: e.target.value,
                     })
                   }
+                  rows={3}
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
               </div>
@@ -176,6 +179,7 @@ const Historial = ({ pacienteID }) => {
                       diagnostico: e.target.value,
                     })
                   }
+                  rows={3}
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
               </div>
@@ -192,6 +196,7 @@ const Historial = ({ pacienteID }) => {
                       tratamiento: e.target.value,
                     })
                   }
+                  rows={9}
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
               </div>
@@ -269,15 +274,22 @@ const Historial = ({ pacienteID }) => {
                       Motivo: {consulta.motivo}
                     </h2>
 
-                    <p className="text-gray-700">
-                      Diagnostico: {consulta.diagnostico}
+                    <p className="text-gray-700 font-semibold">
+                      Diagnostico:{" "}
+                      <span className="font-light">{consulta.diagnostico}</span>
                     </p>
-                    <p className="text-gray-700">
-                      Tratamiento: {consulta.tratamiento}
+                    <p className="text-gray-700 font-semibold ">
+                      Tratamiento:{" "}
+                      <span className=" font-light">
+                        {consulta.tratamiento}
+                      </span>
                     </p>
-                    <p className="text-gray-700">
+                    <p className="text-gray-700 font-semibold">
                       {" "}
-                      Fecha: {consulta.fecha.split("-").reverse().join("-")}
+                      Fecha:{" "}
+                      <span className="font-light">
+                        {consulta.fecha.split("-").reverse().join("-")}
+                      </span>
                     </p>
                     <button
                       onClick={handleEliminar}
