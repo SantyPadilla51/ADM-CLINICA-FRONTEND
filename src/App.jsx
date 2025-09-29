@@ -16,6 +16,7 @@ import MiPerfil from "./components/perfil/MiPerfil";
 import PerfilPaciente from "./components/pacientes/PerfilPaciente";
 import EditarPerfil from "./components/perfil/EditarPerfil";
 import HistorialPaciente from "./components/pacientes/HistorialPaciente";
+import Turnos from "./components/auth/Turnos";
 
 function App() {
   return (
@@ -35,6 +36,7 @@ function App() {
             <Route path="editar-perfil/:id" element={<EditarPerfil />} />
 
             <Route path="/admin" element={<RutasProtegidas />}>
+              <Route path="pacientes/turnos" element={<Turnos />} />
               <Route path="pacientes" element={<ContenedorPacientes />} />
               <Route
                 path="pacientes/crear-paciente"

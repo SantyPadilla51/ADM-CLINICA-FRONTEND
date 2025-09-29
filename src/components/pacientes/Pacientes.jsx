@@ -84,6 +84,14 @@ const Pacientes = () => {
           <div>
             <button
               className="rounded bg-indigo-600 text-white px-5 hover:bg-indigo-500 p-3 mt-5 text-center"
+              onClick={() => navigate("turnos")}
+            >
+              Turnos
+            </button>
+          </div>
+          <div>
+            <button
+              className="rounded bg-indigo-600 text-white px-5 hover:bg-indigo-500 p-3 mt-5 text-center"
               onClick={() => navigate("crear-paciente")}
             >
               Agregar Paciente

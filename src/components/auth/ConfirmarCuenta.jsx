@@ -16,7 +16,6 @@ const ConfirmarCuenta = () => {
   };
 
   const confirmarCuenta = async () => {
-    console.log("Iniciando sesion..");
 
     try {
       setCargando(true);

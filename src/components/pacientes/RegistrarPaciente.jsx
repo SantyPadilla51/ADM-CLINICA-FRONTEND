@@ -29,6 +29,7 @@ const RegistrarPaciente = () => {
     e.preventDefault();
     setCargando(true);
     const toastID = toast.loading("Guardando Paciente");
+
     try {
       const token = localStorage.getItem("token");
       const url = "/crear-paciente";
@@ -38,6 +39,7 @@ const RegistrarPaciente = () => {
           Authorization: `Bearer ${token}`,
         },
       };
+
       const { data } = await clienteAxios.post(url, paciente, config);
 
       if (data.ok === true) {

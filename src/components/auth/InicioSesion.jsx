@@ -57,8 +57,14 @@ const InicioSesion = () => {
           }, 1000);
         }
       } catch (error) {
+        toast.update(toastId, {
+          render:
+            error.response?.data?.msg || "Hubo un error al iniciar sesión",
+          type: "error",
+          isLoading: false,
+          autoClose: 2000,
+        });
         setCargando(false);
-        toast.error("Hubo un error al iniciar sesion");
       }
     }
   };
