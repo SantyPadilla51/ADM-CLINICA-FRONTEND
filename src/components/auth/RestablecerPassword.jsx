@@ -5,6 +5,7 @@ import Navbar from "../navbar/Navbar";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import clienteAxios from "../../config/axios";
+import BtnVolver from "../ui/BtnVolver";
 
 const RestablecerPassword = () => {
   const [cargando, setCargando] = useState(false);
@@ -66,9 +67,7 @@ const RestablecerPassword = () => {
   return (
     <>
       <Navbar />
-      <div className="bg-gray-100">
-        <BtnVolver onClick={handleNavigate} />
-      </div>
+      <BtnVolver onClick={handleNavigate} />
 
       <div className="min-h-screen flex items-center justify-center bg-gray-100">
         <form
