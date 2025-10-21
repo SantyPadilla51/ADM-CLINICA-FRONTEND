@@ -13,8 +13,12 @@ const Turnos = () => {
   const [loading, setLoading] = useState(false);
   const [editTurno, setEditTurno] = useState(null);
   const [crearTurno, setCrearTurno] = useState(null);
-  const [turnoSeleccionado, setTurnoSeleccionado] = useState(null);
   const [nuevoTurno, setNuevoTurno] = useState({
+    paciente: "",
+    hora: "",
+    fecha: "",
+  });
+  const [turnoEditado, setTurnoEditado] = useState({
     paciente: "",
     hora: "",
     fecha: "",
@@ -79,13 +83,25 @@ const Turnos = () => {
     setNuevoTurno({ ...nuevoTurno, [e.target.name]: e.target.value });
   };
 
+  const handleChangeEdit = (e) => {
+    setTurnoEditado({ ...turnoEditado, [e.target.name]: e.target.value });
+  };
+
   const handleNavigate = () => {
     navigate(`/admin/pacientes`);
   };
 
   const handleEdit = (id) => {
     const turno = turnos.find((t) => t.id === id);
-    setTurnoSeleccionado(turno);
+
+    setTurnoEditado({
+      id: turno.id,
+      paciente: turno.paciente,
+      hora: turno.hora,
+      fecha: turno.fecha,
+      estado: turno.estado,
+      doctorId: turno.doctorId,
+    });
     setEditTurno(true);
   };
 
@@ -93,7 +109,7 @@ const Turnos = () => {
     e.preventDefault();
 
     try {
-      const url = "turnos";
+      const url = `turnos/${id}`;
       const token = localStorage.getItem("token");
       const config = {
         headers: {
@@ -101,11 +117,23 @@ const Turnos = () => {
           Authorization: `Bearer ${token}`,
         },
       };
-      const { data } = await clienteAxios(url, config);
+      const { data } = await clienteAxios.put(url, turnoEditado, config);
 
-      setTurnos(data);
+      toast.success({
+        position: "top-right",
+        render: data.msg,
+        type: "success",
+        autoClose: 2000,
+      });
+      setEditTurno(null);
+      getTurnos();
     } catch (error) {
-      console.log("Hubo un error");
+      toast.error({
+        position: "top-right",
+        render: data.msg,
+        type: "success",
+        autoClose: 2000,
+      });
     }
   };
 
@@ -144,6 +172,7 @@ const Turnos = () => {
                   type="text"
                   placeholder="Nombre del paciente"
                   className="w-full border rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                  autoComplete="off"
                   required
                 />
               </div>
@@ -157,27 +186,13 @@ const Turnos = () => {
                   name="fecha"
                   onChange={handleChange}
                   type="date"
-                  className="w-full appearance-none border border-gray-300 rounded-lg p-2 pl-10 
+                  className="w-full appearance-none border border-gray-300 rounded-lg p-2 
                  bg-white text-gray-700 shadow-sm 
                  focus:outline-none focus:ring-2 focus:ring-blue-500 
                  hover:border-blue-400 cursor-pointer"
                   min={new Date().toISOString().split("T")[0]} // evita fechas pasadas
                   required
                 />
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400 pointer-events-none"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M8 7V3m8 4V3m-9 8h10m-11 8h12a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2z"
-                  />
-                </svg>
               </div>
 
               <div>
@@ -220,7 +235,10 @@ const Turnos = () => {
               ➕ Editar Turno
             </h2>
 
-            <form onSubmit={(e) => editarTurno(e)} className="space-y-4">
+            <form
+              onSubmit={(e) => editarTurno(e, turnoEditado.id)}
+              className="space-y-4"
+            >
               <div>
                 <label className="block text-sm font-medium text-gray-700">
                   Paciente
@@ -228,8 +246,8 @@ const Turnos = () => {
                 <input
                   id="paciente"
                   name="paciente"
-                  value={turnoSeleccionado.paciente}
-                  onChange={handleChange}
+                  value={turnoEditado.paciente}
+                  onChange={handleChangeEdit}
                   type="text"
                   placeholder="Nombre del paciente"
                   className="w-full border rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
@@ -244,8 +262,8 @@ const Turnos = () => {
                 <input
                   id="fecha"
                   name="fecha"
-                  value={turnoSeleccionado.fecha}
-                  onChange={handleChange}
+                  value={turnoEditado.fecha}
+                  onChange={handleChangeEdit}
                   type="date"
                   className="w-full appearance-none border border-gray-300 rounded-lg p-2 pl-10 
                  bg-white text-gray-700 shadow-sm "
@@ -261,8 +279,8 @@ const Turnos = () => {
                 <input
                   id="hora"
                   name="hora"
-                  value={turnoSeleccionado.hora}
-                  onChange={handleChange}
+                  value={turnoEditado.hora}
+                  onChange={handleChangeEdit}
                   type="time"
                   className="w-full border rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
                   required
@@ -276,6 +294,8 @@ const Turnos = () => {
                 <select
                   name="estado"
                   id="estado"
+                  value={turnoEditado.estado}
+                  onChange={handleChangeEdit}
                   className="w-full border rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
                   required
                 >
@@ -330,8 +350,13 @@ const Turnos = () => {
         {/* Resumen */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
           <div className="bg-white p-4 rounded-2xl shadow">
-            <h2 className="text-lg font-semibold">Total Pendientes</h2>
-            <p className="text-3xl font-bold text-blue-600">{turnos.length}</p>
+            <h2 className="text-lg font-semibold">
+              {" "}
+              Total {estadoActivo || "Turnos"}
+            </h2>
+            <p className="text-3xl font-bold text-blue-600">
+              {turnos.filter((turno) => turno.estado === estadoActivo).length}
+            </p>
           </div>
           <div className="bg-white p-4 rounded-2xl shadow">
             <h2 className="text-lg font-semibold">Próximo turno</h2>
@@ -344,7 +369,7 @@ const Turnos = () => {
           <div className="bg-white p-4 rounded-2xl shadow">
             <h2 className="text-lg font-semibold">Fecha</h2>
             <p className="text-gray-700">
-              {new Date().toLocaleDateString().split("/").join("/")}
+              {new Date().toLocaleDateString("es-AR")}
             </p>
           </div>
         </div>
@@ -394,7 +419,20 @@ const Turnos = () => {
                       </td>
                       <td className="px-4 py-2">{turno.hora.slice(0, 5)}</td>
                       <td className="px-4 py-2">
-                        <span className="bg-yellow-200 text-yellow-800 px-2 py-1 rounded-full text-xs">
+                        <span
+                          className={`px-2 py-1 rounded-full text-xs font-semibold ${
+                            turno.estado === "Pendiente"
+                              ? "bg-yellow-200 text-yellow-800"
+                              : turno.estado === "Realizado"
+                              ? "bg-green-200 text-green-800"
+                              : turno.estado === "Cancelado"
+                              ? "bg-red-200 text-red-800"
+                              : turno.estado === "Reprogramado"
+                              ? "bg-blue-200 text-gray-800"
+                              : "bg-gray-200 text-gray-800"
+                          }`}
+                        >
+                          {" "}
                           {turno.estado}
                         </span>
                       </td>
