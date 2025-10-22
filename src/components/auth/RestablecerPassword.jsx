@@ -25,9 +25,13 @@ const RestablecerPassword = () => {
     try {
       const url = "olvide-password";
 
-      const { data } = await clienteAxios.post(url, email, {
-        headers: { "Content-Type": "application/json" },
-      });
+      const { data } = await clienteAxios.post(
+        url,
+        { email },
+        {
+          headers: { "Content-Type": "application/json" },
+        }
+      );
 
       if (data.ok === true) {
         toast.success("Hemos enviado un email con las instrucciones");

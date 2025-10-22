@@ -317,19 +317,19 @@ const Turnos = () => {
         </div>
       ) : null}
 
-      <div className="p-6">
+      <div className=" p-2 lg:p-6">
         {/*Btn Crear Turno*/}
-        <div className="flex justify-between mb-4">
+        <div className="block lg:flex justify-between mb-4">
           <h1 className="text-2xl font-bold mb-4">📋 Dashboard de Turnos</h1>
           <button
             onClick={() => setCrearTurno(true)}
-            className="bg-indigo-700 px-4 text-white rounded-md hover:bg-indigo-600"
+            className="p-2 mt-5 mb-5 lg:mb-0 lg:mt-0 bg-indigo-700 px-4 text-white rounded-md hover:bg-indigo-600"
           >
             Agendar Turno
           </button>
         </div>
 
-        <div className="flex gap-4 mb-4">
+        <div className="flex flex-wrap gap-4 mb-4">
           {["Pendiente", "Realizado", "Cancelado", "Reprogramado"].map(
             (estado) => (
               <button
