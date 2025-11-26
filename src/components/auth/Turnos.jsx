@@ -107,7 +107,7 @@ const Turnos = () => {
 
   const editarTurno = async (e, id) => {
     e.preventDefault();
-
+    setCargando(true);
     try {
       const url = `turnos/${id}`;
       const token = localStorage.getItem("token");
@@ -119,14 +119,14 @@ const Turnos = () => {
       };
       const { data } = await clienteAxios.put(url, turnoEditado, config);
 
-      toast.success({
-        position: "top-right",
-        render: data.msg,
-        type: "success",
-        autoClose: 2000,
-      });
-      setEditTurno(null);
-      getTurnos();
+      if (data.ok == true) {
+        toast.success("Turno Editado", {
+          position: "top-right",
+        });
+        setEditTurno(null);
+        setCargando(false);
+        getTurnos();
+      }
     } catch (error) {
       toast.error({
         position: "top-right",
@@ -302,7 +302,6 @@ const Turnos = () => {
                   <option value="Realizado">Realizado</option>
                   <option value="Cancelado">Cancelado</option>
                   <option value="Reprogramado">Reprogramado</option>
-                  <option value="Ausente">Ausente</option>
                 </select>
               </div>
 
@@ -310,7 +309,7 @@ const Turnos = () => {
                 type="submit"
                 className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition"
               >
-                {cargando ? "Cargando.." : "Editar"}
+                {cargando ? "Editando.." : "Confirmar cambios"}
               </button>
             </form>
           </div>
