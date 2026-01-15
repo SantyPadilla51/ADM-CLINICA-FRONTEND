@@ -8,9 +8,6 @@ Permite organizar información de pacientes de manera clara, segura y eficiente.
 🔗 **Sitio web:**  
 https://adm-clinica-frontend.vercel.app/
 
-🔗 **Repositorio:**  
-https://github.com/SantyPadilla51/ADM-CLINICA-FRONTEND
-
 ---
 
 ## 🧩 Características
