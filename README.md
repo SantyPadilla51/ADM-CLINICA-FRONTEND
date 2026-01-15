@@ -51,6 +51,8 @@ Este proyecto fue desarrollado con fines educativos y de práctica, con foco en:
 
 - Deploy en Vercel
 
+---
+
 👨‍💻 Autor
 
 Santiago Padilla
