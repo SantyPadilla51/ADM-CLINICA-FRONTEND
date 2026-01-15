@@ -13,12 +13,6 @@ https://github.com/SantyPadilla51/ADM-CLINICA-FRONTEND
 
 ---
 
-## 📸 Preview
-
-![Doc Panel](public/img/ADM-CLINICA.png)
-
----
-
 ## 🧩 Características
 
 - 👨‍⚕️ Gestión de pacientes
