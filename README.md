@@ -53,8 +53,9 @@ Este proyecto fue desarrollado con fines educativos y de práctica, con foco en:
 
 👨‍💻 Autor
 
-Sant Padilla
-Desarrollador Web
+Santiago Padilla
+
+Software Developer
 
 GitHub: https://github.com/SantyPadilla51
 
