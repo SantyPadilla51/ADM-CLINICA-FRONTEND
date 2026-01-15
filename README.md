@@ -1,8 +1,69 @@
-# React + Vite
+# 🏥 Doc Panel
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Aplicación web desarrollada para llevar el **control y gestión de estudios clínicos de pacientes**, pensada para uso médico/administrativo.  
+Permite organizar información de pacientes de manera clara, segura y eficiente.
 
-Currently, two official plugins are available:
+## 🚀 Demo
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+🔗 **Sitio web:**  
+https://adm-clinica-frontend.vercel.app/
+
+🔗 **Repositorio:**  
+https://github.com/SantyPadilla51/ADM-CLINICA-FRONTEND
+
+---
+
+## 📸 Preview
+
+![Doc Panel](public/img/ADM-CLINICA.png)
+
+---
+
+## 🧩 Características
+
+- 👨‍⚕️ Gestión de pacientes
+- 🧪 Registro y control de estudios clínicos
+- 📁 Organización de información médica
+- 🔐 Acceso mediante autenticación
+- 📱 Interfaz responsive
+- ⚡ Experiencia de usuario clara y rápida
+
+---
+
+## 🛠️ Tecnologías utilizadas
+
+- React  
+- Vite  
+- JavaScript  
+- Tailwind CSS 
+- NodeJs
+- Express
+- PostgresSQL
+- Supabase
+- Railway(backend)
+
+---
+
+🧪 Objetivo del proyecto
+
+Este proyecto fue desarrollado con fines educativos y de práctica, con foco en:
+
+- Desarrollo de aplicaciones CRUD
+
+- Manejo de estados globales
+
+- Autenticación de usuarios
+
+- Buenas prácticas en frontend
+
+- Consumo de APIs backend
+
+- Deploy en Vercel
+
+👨‍💻 Autor
+
+Sant Padilla
+Desarrollador Web
+
+GitHub: https://github.com/SantyPadilla51
+
