@@ -56,9 +56,10 @@ const Pacientes = () => {
   return (
     <>
       <NavbarAdmin />
-      <div className="mx-3 lg:grid grid-cols-7 items-center">
+      <div className="mx-3 lg:grid lg:grid-cols-7 lg:items-center">
         <form
-          className="mx-auto mt-5 col-start-2 col-end-5 w-full"
+          className=" mx-auto mt-5 w-full
+    lg:mt-0 lg:col-start-1 lg:col-end-4"
           onSubmit={buscarPaciente}
         >
           <div className="flex">
@@ -80,39 +81,41 @@ const Pacientes = () => {
           </div>
         </form>
 
-        <div className="lg:ms-8 flex col-start-5 col-end-8 gap-3">
-          <div>
-            <button
-              className="rounded bg-indigo-600 text-white px-5 hover:bg-indigo-500 p-3 mt-5 text-center"
-              onClick={() => navigate("turnos")}
-            >
-              Turnos
-            </button>
-          </div>
-          <div>
-            <button
-              className="rounded bg-indigo-600 text-white px-5 hover:bg-indigo-500 p-3 mt-5 text-center"
-              onClick={() => navigate("crear-paciente")}
-            >
-              Agregar Paciente
-            </button>
-          </div>
-          <div>
-            <button
-              className="rounded bg-indigo-600 text-white hover:bg-indigo-500 p-3 mt-5 text-center"
-              onClick={verPacientes}
-            >
-              Ver todos los Pacientes
-            </button>
-          </div>
-          <div>
-            <button
-              className="rounded-md bg-teal-500 text-white px-5 hover:bg-teal-600  p-3 mt-5 text-center"
-              onClick={() => navigate("perfil")}
-            >
-              Mi Perfil
-            </button>
-          </div>
+        <div
+          className="
+ m-5
+    grid grid-cols-2 grid-rows-2 gap-6
+    lg:flex lg:flex-row lg:items-center
+    lg:col-start-4 lg:col-end-8 lg:gap-3
+"
+        >
+          <button
+            className="w-full h-full rounded bg-indigo-600 text-white hover:bg-indigo-500 p-4 text-center"
+            onClick={() => navigate("turnos")}
+          >
+            Turnos
+          </button>
+
+          <button
+            className="w-full h-full rounded bg-indigo-600 text-white hover:bg-indigo-500 p-4 text-center"
+            onClick={() => navigate("crear-paciente")}
+          >
+            Agregar Paciente
+          </button>
+
+          <button
+            className="w-full h-full rounded bg-indigo-600 text-white hover:bg-indigo-500 p-4 text-center"
+            onClick={verPacientes}
+          >
+            Todos los Pacientes
+          </button>
+
+          <button
+            className="w-full h-full rounded bg-teal-500 text-white hover:bg-teal-600 p-4 text-center"
+            onClick={() => navigate("perfil")}
+          >
+            Mi Perfil
+          </button>
         </div>
       </div>
 
