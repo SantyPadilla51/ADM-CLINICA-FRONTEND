@@ -50,7 +50,7 @@ const Examenes = ({ pacienteID }) => {
         `/pacientes/examenes/${examenId}`,
         {
           headers: { Authorization: `Bearer ${token}` },
-        }
+        },
       );
 
       if (data.ok == true) {
@@ -79,13 +79,14 @@ const Examenes = ({ pacienteID }) => {
 
     try {
       const file = nuevoExamen.imagen;
+
       const fileName = `${Date.now()}_${file.name}`;
 
       const { data, error } = await supabase.storage
         .from("examenes")
         .upload(`imagenes/${fileName}`, file);
 
-      if (error) throw error;
+      console.log(data);
 
       const { data: publicUrlData } = supabase.storage
         .from("examenes")
@@ -99,22 +100,24 @@ const Examenes = ({ pacienteID }) => {
         imagenUrl: urlImagen,
       };
 
-      const token = localStorage.getItem("token");
-      await clienteAxios.post(
-        `/pacientes/examenes/${pacienteID}`,
-        examenPayload,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      console.log(examenPayload);
 
-      toast.success("Examen creado correctamente");
-      setNuevoExamen("");
-      setAddExamen(false);
-      setCargando(false);
-      getExamenes();
+      // const token = localStorage.getItem("token");
+      // await clienteAxios.post(
+      //   `/pacientes/examenes/${pacienteID}`,
+      //   examenPayload,
+      //   {
+      //     headers: {
+      //       Authorization: `Bearer ${token}`,
+      //     },
+      //   },
+      // );
+
+      // toast.success("Examen creado correctamente");
+      // setNuevoExamen("");
+      // setAddExamen(false);
+      // setCargando(false);
+      // getExamenes();
     } catch (error) {
       toast.error("Error al subir el examen");
     } finally {
@@ -216,7 +219,7 @@ const Examenes = ({ pacienteID }) => {
                 onClick={() =>
                   deleteExamen(
                     examenSeleccionado.id,
-                    examenSeleccionado.imagenUrl
+                    examenSeleccionado.imagenUrl,
                   )
                 }
                 className="bg-red-600 hover:bg-red-500 px-4 py-2 rounded-lg transition text-white"
@@ -262,7 +265,9 @@ const Examenes = ({ pacienteID }) => {
                   >
                     <p className="font-semibold">
                       Descripción:{" "}
-                      <span className="font-light">{examen.descripcion}</span>{" "}
+                      <span className="font-light">
+                        {examen.descripcion}
+                      </span>{" "}
                     </p>
                     <button
                       onClick={() => handleEliminar(examen)}

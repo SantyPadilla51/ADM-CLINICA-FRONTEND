@@ -77,15 +77,15 @@ const InicioSesion = () => {
     <>
       <Navbar />
       <div className="min-h-screen flex items-center justify-center bg-gray-100">
-        <div className="bg-white p-8 rounded-md shadow-md w-full max-w-md mx-3">
-          <h2 className="text-2xl font-bold mb-6 text-gray-800 text-center">
+        <div className="bg-black p-8 rounded-md shadow-md w-full max-w-md mx-3">
+          <h2 className="text-2xl font-bold mb-6 text-white text-center">
             Inicia Sesión
           </h2>
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
               <label
                 htmlFor="email"
-                className="block text-sm font-medium text-gray-700"
+                className="block text-sm font-medium text-white"
               >
                 Correo Electrónico
               </label>
@@ -103,7 +103,7 @@ const InicioSesion = () => {
             <div>
               <label
                 htmlFor="password"
-                className="block text-sm font-medium text-gray-700"
+                className="block text-sm font-medium text-white"
               >
                 Contraseña
               </label>
@@ -136,14 +136,14 @@ const InicioSesion = () => {
           <div className="mt-6 flex justify-between items-center">
             <Link
               to={"/olvide-password"}
-              className="text-sm text-indigo-600 hover:text-indigo-800"
+              className="text-sm text-white hover:underline"
             >
               ¿Olvidaste tu contraseña?
             </Link>
 
             <Link
               to={"/crear-cuenta"}
-              className="text-sm text-indigo-600 hover:text-indigo-800 font-medium"
+              className="text-sm text-white hover:underline font-medium"
             >
               Regístrate
             </Link>
