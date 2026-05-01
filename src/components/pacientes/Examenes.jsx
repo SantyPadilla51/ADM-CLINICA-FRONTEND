@@ -102,22 +102,22 @@ const Examenes = ({ pacienteID }) => {
 
       console.log(examenPayload);
 
-      // const token = localStorage.getItem("token");
-      // await clienteAxios.post(
-      //   `/pacientes/examenes/${pacienteID}`,
-      //   examenPayload,
-      //   {
-      //     headers: {
-      //       Authorization: `Bearer ${token}`,
-      //     },
-      //   },
-      // );
+      const token = localStorage.getItem("token");
+      await clienteAxios.post(
+        `/pacientes/examenes/${pacienteID}`,
+        examenPayload,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
 
-      // toast.success("Examen creado correctamente");
-      // setNuevoExamen("");
-      // setAddExamen(false);
-      // setCargando(false);
-      // getExamenes();
+      toast.success("Examen creado correctamente");
+      setNuevoExamen("");
+      setAddExamen(false);
+      setCargando(false);
+      getExamenes();
     } catch (error) {
       toast.error("Error al subir el examen");
     } finally {
