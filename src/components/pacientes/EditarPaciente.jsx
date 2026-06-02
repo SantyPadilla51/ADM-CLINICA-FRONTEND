@@ -64,7 +64,7 @@ const EditarPaciente = () => {
       const { data } = await clienteAxios.put(
         url,
         JSON.stringify(formData),
-        config
+        config,
       );
 
       if (data.ok === true) {
@@ -109,13 +109,26 @@ const EditarPaciente = () => {
 
       <BtnVolver onClick={handleNavigate} />
 
-      <div className="max-w-4xl mx-4 lg:mx-auto bg-white p-8 rounded-md shadow-md mt-10">
-        <h2 className="text-2xl font-bold mb-6 text-gray-800 text-center">
-          Editar Paciente
-        </h2>
-        <form className="flex flex-col lg:grid md:grid-cols-2 gap-6">
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
+      <div className="max-w-4xl mx-4 md:mx-6 lg:mx-auto bg-white p-6 md:p-8 rounded-2xl border border-slate-100 shadow-sm mt-6">
+        <div className="mb-6 pb-4 border-b border-slate-100 text-center md:text-left">
+          <h2 className="text-xl font-black text-slate-800 tracking-tight">
+            Editar Perfil del Paciente
+          </h2>
+          <p className="text-slate-400 text-xs font-medium mt-0.5">
+            Modifique los datos filiatorios y de contacto del paciente
+          </p>
+        </div>
+
+        <form
+          onSubmit={actualizarPaciente}
+          className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-5"
+        >
+          {/* Campo: Nombre */}
+          <div className="space-y-1.5">
+            <label
+              htmlFor="nombre"
+              className="text-xs font-bold text-slate-500 uppercase tracking-wider"
+            >
               Nombre
             </label>
             <input
@@ -124,13 +137,17 @@ const EditarPaciente = () => {
               name="nombre"
               value={formData.nombre}
               onChange={handleChange}
-              className="mt-1 p-2 block w-full rounded-md border-gray-300 bg-slate-100 shadow-md focus:outline-none sm:text-sm"
               placeholder="Escribe el nombre"
+              className="w-full px-4 py-2.5 text-sm bg-slate-50 focus:bg-white border border-slate-200 focus:border-blue-500 rounded-xl focus:ring-4 focus:ring-blue-500/10 transition-all outline-none font-medium text-slate-800 placeholder-slate-400"
             />
           </div>
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
+          {/* Campo: Apellido */}
+          <div className="space-y-1.5">
+            <label
+              htmlFor="apellido"
+              className="text-xs font-bold text-slate-500 uppercase tracking-wider"
+            >
               Apellido
             </label>
             <input
@@ -139,13 +156,17 @@ const EditarPaciente = () => {
               name="apellido"
               value={formData.apellido}
               onChange={handleChange}
-              className="mt-1 p-2 block w-full rounded-md border-gray-300 bg-slate-100 shadow-md focus:outline-none sm:text-sm"
               placeholder="Escribe el apellido"
+              className="w-full px-4 py-2.5 text-sm bg-slate-50 focus:bg-white border border-slate-200 focus:border-blue-500 rounded-xl focus:ring-4 focus:ring-blue-500/10 transition-all outline-none font-medium text-slate-800 placeholder-slate-400"
             />
           </div>
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
+          {/* Campo: Edad */}
+          <div className="space-y-1.5">
+            <label
+              htmlFor="edad"
+              className="text-xs font-bold text-slate-500 uppercase tracking-wider"
+            >
               Edad
             </label>
             <input
@@ -155,101 +176,65 @@ const EditarPaciente = () => {
               name="edad"
               value={formData.edad}
               onChange={handleChange}
-              className="mt-1 p-2 block w-full rounded-md border-gray-300 bg-slate-100 shadow-md focus:outline-none sm:text-sm"
-              placeholder="Escribe la edad"
+              placeholder="Ej. 35"
+              className="w-full px-4 py-2.5 text-sm bg-slate-50 focus:bg-white border border-slate-200 focus:border-blue-500 rounded-xl focus:ring-4 focus:ring-blue-500/10 transition-all outline-none font-medium text-slate-800 placeholder-slate-400"
             />
           </div>
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Teléfono
-            </label>
-            <input
-              type="text"
-              id="telefono"
-              name="telefono"
-              maxLength={10}
-              value={formData.telefono}
-              onChange={handleChange}
-              className="mt-1 p-2 block w-full rounded-md border-gray-300 bg-slate-100 shadow-md focus:outline-none sm:text-sm"
-              placeholder="Escribe el teléfono"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
+          {/* Campo: DNI */}
+          <div className="space-y-1.5">
+            <label
+              htmlFor="dni"
+              className="text-xs font-bold text-slate-500 uppercase tracking-wider"
+            >
               DNI
             </label>
             <input
               type="text"
+              maxLength={8}
               id="dni"
               name="dni"
-              maxLength={8}
               value={formData.dni}
               onChange={handleChange}
-              className="mt-1 p-2 block w-full rounded-md border-gray-300 bg-slate-100 shadow-md focus:outline-none sm:text-sm"
-              placeholder="Escribe el DNI"
+              placeholder="Número de documento sin puntos"
+              className="w-full px-4 py-2.5 text-sm bg-slate-50 focus:bg-white border border-slate-200 focus:border-blue-500 rounded-xl focus:ring-4 focus:ring-blue-500/10 transition-all outline-none font-medium text-slate-800 placeholder-slate-400"
             />
           </div>
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Cobertura Medica
-            </label>
-            <select
-              id="cobertura"
-              name="cobertura"
-              value={formData.cobertura}
-              onChange={handleChange}
-              className="mt-1 p-2 block w-full rounded-md border-gray-300 bg-slate-100 shadow-md focus:outline-none  sm:text-sm"
+          {/* Campo: Teléfono */}
+          <div className="space-y-1.5">
+            <label
+              htmlFor="telefono"
+              className="text-xs font-bold text-slate-500 uppercase tracking-wider"
             >
-              <option value="">{formData.cobertura}</option>
-              <option value="osde">OSDE</option>
-              <option value="swiss medical">Swiss Medical</option>
-              <option value="galeno">Galeno</option>
-              <option value="medicus">Medicus</option>
-              <option value="omint">Omint</option>
-              <option value="hospital italiano">Hospital Italiano</option>
-              <option value="hospital britanico">Hospital Británico</option>
-              <option value="osdepyme">OSDEPYME</option>
-              <option value="accord salud">Accord Salud</option>
-              <option value="sancor salud">Sancor Salud</option>
-              <option value="osde binario">OSDE Binario</option>
-              <option value="premedic">Premedic</option>
-              <option value="medifé">Medifé</option>
-              <option value="aca salud">ACA Salud</option>
-              <option value="staff médico">Staff Médico</option>
-              <option value="docthos">Docthos</option>
-              <option value="ospat">OSPAT</option>
-              <option value="ospaca">OSPACA</option>
-              <option value="ospjn">OSPJN</option>
-              <option value="ospesgype">OSPESGYPE</option>
-              <option value="ospedyc">OSPedyC</option>
-              <option value="ospim">OSPIM</option>
-              <option value="ospia">OSPIA</option>
-              <option value="ospiv">OSPIV</option>
-              <option value="ospel">OSPEL</option>
-              <option value="ospf">OSPF</option>
-              <option value="ospm">OSPM</option>
-              <option value="osppra">OSPPRA</option>
-              <option value="osppc">OSPPC</option>
-              <option value="osppc">OSPPc</option>
-              <option value="osppra">OSPPRA</option>
-              <option value="osppce">OSPPCe</option>
-              <option value="osppc">OSPPC</option>
-            </select>
+              Teléfono de Contacto
+            </label>
+            <input
+              type="text"
+              maxLength={10}
+              id="telefono"
+              name="telefono"
+              value={formData.telefono}
+              onChange={handleChange}
+              placeholder="Código de área + número"
+              className="w-full px-4 py-2.5 text-sm bg-slate-50 focus:bg-white border border-slate-200 focus:border-blue-500 rounded-xl focus:ring-4 focus:ring-blue-500/10 transition-all outline-none font-medium text-slate-800 placeholder-slate-400"
+            />
           </div>
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Sexo
+          {/* Campo: Sexo */}
+          <div className="space-y-1.5">
+            <label
+              htmlFor="sexo"
+              className="text-xs font-bold text-slate-500 uppercase tracking-wider"
+            >
+              Sexo Biológico
             </label>
             <select
               id="sexo"
               name="sexo"
               value={formData.sexo}
               onChange={handleChange}
-              className="mt-1 p-2 block w-full rounded-md border-gray-300 bg-slate-100 shadow-md focus:outline-none sm:text-sm"
+              className="w-full px-4 py-2.5 text-sm bg-slate-50 focus:bg-white border border-slate-200 focus:border-blue-500 rounded-xl focus:ring-4 focus:ring-blue-500/10 transition-all outline-none font-semibold text-slate-700 cursor-pointer"
             >
               <option value="">Selecciona una opción</option>
               <option value="masculino">Masculino</option>
@@ -257,9 +242,51 @@ const EditarPaciente = () => {
             </select>
           </div>
 
-          <div className="md:col-span-2">
-            <label className="block text-sm font-medium text-gray-700">
-              Email
+          {/* Campo: Cobertura Médica */}
+          <div className="space-y-1.5 md:col-span-2">
+            <label
+              htmlFor="cobertura"
+              className="text-xs font-bold text-slate-500 uppercase tracking-wider"
+            >
+              Obra Social / Prepaga
+            </label>
+            <select
+              id="cobertura"
+              name="cobertura"
+              value={formData.cobertura}
+              onChange={handleChange}
+              className="w-full px-4 py-2.5 text-sm bg-slate-50 focus:bg-white border border-slate-200 focus:border-blue-500 rounded-xl focus:ring-4 focus:ring-blue-500/10 transition-all outline-none font-semibold text-slate-700 cursor-pointer"
+            >
+              <option value="">Particular / Sin Cobertura</option>
+              <option value="osde">OSDE</option>
+              <option value="swiss medical">Swiss Medical</option>
+              <option value="galeno">Galeno</option>
+              <option value="medicus">Medicus</option>
+              <option value="omint">Omint</option>
+              <option value="hospital italiano">Hospital Italiano</option>
+              <option value="hospital britanico">Hospital Británico</option>
+              <option value="sancor salud">Sancor Salud</option>
+              <option value="medifé">Medifé</option>
+              <option value="accord salud">Accord Salud</option>
+              <option value="osdepyme">OSDEPYME</option>
+              <option value="premedic">Premedic</option>
+              <option value="asociart">Asociart ART</option>
+              <option value="ioma">IOMA</option>
+              <option value="pami">PAMI</option>
+              <option value="ospat">OSPAT</option>
+              <option value="ospaca">OSPACA</option>
+              <option value="ospjn">OSPJN (Poder Judicial)</option>
+              <option value="ospedyc">OSPedyC</option>
+            </select>
+          </div>
+
+          {/* Campo: Email */}
+          <div className="space-y-1.5 md:col-span-2">
+            <label
+              htmlFor="email"
+              className="text-xs font-bold text-slate-500 uppercase tracking-wider"
+            >
+              Correo Electrónico
             </label>
             <input
               type="email"
@@ -267,21 +294,51 @@ const EditarPaciente = () => {
               name="email"
               value={formData.email}
               onChange={handleChange}
-              className="mt-1 p-2 block w-full rounded-md border-gray-300 bg-slate-100 shadow-md focus:outline-none sm:text-sm"
-              placeholder="Escribe el email"
+              placeholder="ejemplo@correo.com"
+              className="w-full px-4 py-2.5 text-sm bg-slate-50 focus:bg-white border border-slate-200 focus:border-blue-500 rounded-xl focus:ring-4 focus:ring-blue-500/10 transition-all outline-none font-medium text-slate-800 placeholder-slate-400"
             />
           </div>
 
-          <button
-            onClick={(e) => actualizarPaciente(e)}
-            disabled={cargando}
-            type="submit"
-            className={`col-span-2 w-full md:w-auto bg-indigo-600 py-2 px-4 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500  text-white p-2 mt-5 ${
-              cargando ? "opacity-50 cursor-not-allowed" : "hover:bg-blue-600"
-            }`}
-          >
-            {cargando ? "Guardando..." : "Guardar Cambios"}
-          </button>
+          {/* Fila de Botones / Acciones */}
+          <div className="md:col-span-2 pt-3 flex flex-col-reverse sm:flex-row justify-end gap-3">
+            <button
+              type="submit"
+              disabled={cargando}
+              className={`inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-xl text-xs font-bold text-white transition-all shadow-md active:scale-[0.99] ${
+                cargando
+                  ? "bg-slate-300 text-slate-500 cursor-not-allowed shadow-none"
+                  : "bg-blue-600 hover:bg-blue-700 shadow-blue-100"
+              }`}
+            >
+              {cargando ? (
+                <>
+                  <svg
+                    className="animate-spin h-3.5 w-3.5 text-slate-500"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle
+                      className="opacity-25"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      strokeWidth="4"
+                    />
+                    <path
+                      className="opacity-75"
+                      fill="currentColor"
+                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                    />
+                  </svg>
+                  Actualizando...
+                </>
+              ) : (
+                "Guardar Cambios"
+              )}
+            </button>
+          </div>
         </form>
       </div>
     </>

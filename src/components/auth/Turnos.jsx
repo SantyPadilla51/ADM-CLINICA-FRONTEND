@@ -146,23 +146,44 @@ const Turnos = () => {
       <NavbarAdmin />
       <BtnVolver onClick={handleNavigate} />
       {crearTurno ? (
-        <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
-          <div className="bg-white rounded-2xl shadow-lg w-full max-w-md p-6 relative">
+        <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm flex items-center justify-center z-50 p-4 transition-all">
+          <div className="bg-white rounded-2xl shadow-xl border border-slate-100 w-full max-w-md p-6 relative animate-in fade-in zoom-in-95 duration-200">
             {/* Botón de cerrar */}
             <button
               onClick={() => setCrearTurno(false)}
-              className="absolute top-3 right-3 text-gray-500 hover:text-gray-700"
+              className="absolute top-4 right-4 text-slate-400 hover:text-slate-600 transition-colors p-1 rounded-lg hover:bg-slate-50"
             >
-              ✕
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+              </svg>
             </button>
 
-            <h2 className="text-xl font-bold mb-4 text-center">
-              ➕ Crear Turno
-            </h2>
+            <div className="mb-5 border-b border-slate-100 pb-3">
+              <h2 className="text-lg font-black text-slate-800 tracking-tight">
+                Agendar Nuevo Turno
+              </h2>
+              <p className="text-slate-400 text-xs font-medium mt-0.5">
+                Asigne una fecha y hora para la consulta
+              </p>
+            </div>
 
             <form onSubmit={(e) => agendarTurno(e)} className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700">
+              <div className="space-y-1.5">
+                <label
+                  htmlFor="paciente"
+                  className="text-xs font-bold text-slate-500 uppercase tracking-wider"
+                >
                   Paciente
                 </label>
                 <input
@@ -170,15 +191,18 @@ const Turnos = () => {
                   name="paciente"
                   onChange={handleChange}
                   type="text"
-                  placeholder="Nombre del paciente"
-                  className="w-full border rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                  placeholder="Nombre completo del paciente"
+                  className="w-full px-4 py-2.5 text-sm bg-slate-50 focus:bg-white border border-slate-200 focus:border-blue-500 rounded-xl focus:ring-4 focus:ring-blue-500/10 transition-all outline-none font-medium text-slate-800 placeholder-slate-400"
                   autoComplete="off"
                   required
                 />
               </div>
 
-              <div className="relative">
-                <label className="mb-1 text-sm font-medium text-gray-700">
+              <div className="space-y-1.5">
+                <label
+                  htmlFor="fecha"
+                  className="text-xs font-bold text-slate-500 uppercase tracking-wider"
+                >
                   Fecha
                 </label>
                 <input
@@ -186,17 +210,17 @@ const Turnos = () => {
                   name="fecha"
                   onChange={handleChange}
                   type="date"
-                  className="w-full appearance-none border border-gray-300 rounded-lg p-2 
-                 bg-white text-gray-700 shadow-sm 
-                 focus:outline-none focus:ring-2 focus:ring-blue-500 
-                 hover:border-blue-400 cursor-pointer"
-                  min={new Date().toISOString().split("T")[0]} // evita fechas pasadas
+                  className="w-full px-4 py-2.5 text-sm bg-slate-50 focus:bg-white border border-slate-200 focus:border-blue-500 rounded-xl focus:ring-4 focus:ring-blue-500/10 transition-all outline-none font-semibold text-slate-700 cursor-pointer"
+                  min={new Date().toISOString().split("T")[0]}
                   required
                 />
               </div>
 
-              <div>
-                <label className="block text-sm font-medium text-gray-700">
+              <div className="space-y-1.5">
+                <label
+                  htmlFor="hora"
+                  className="text-xs font-bold text-slate-500 uppercase tracking-wider"
+                >
                   Hora
                 </label>
                 <input
@@ -204,43 +228,70 @@ const Turnos = () => {
                   name="hora"
                   onChange={handleChange}
                   type="time"
-                  className="w-full border rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                  className="w-full px-4 py-2.5 text-sm bg-slate-50 focus:bg-white border border-slate-200 focus:border-blue-500 rounded-xl focus:ring-4 focus:ring-blue-500/10 transition-all outline-none font-semibold text-slate-700 cursor-pointer"
                   required
                 />
               </div>
 
               <button
                 type="submit"
-                className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition"
+                disabled={cargando}
+                className={`w-full inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-xl text-xs font-bold text-white transition-all shadow-md active:scale-[0.99] ${
+                  cargando
+                    ? "bg-slate-300 text-slate-500 cursor-not-allowed shadow-none"
+                    : "bg-blue-600 hover:bg-blue-700 shadow-blue-100"
+                }`}
               >
-                {cargando ? "Cargando.." : "Guardar"}
+                {cargando ? "Agendando..." : "Confirmar Turno"}
               </button>
             </form>
           </div>
         </div>
       ) : null}
 
+      {/* --- MODAL: EDITAR TURNO --- */}
       {editTurno ? (
-        <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
-          <div className="bg-white rounded-2xl shadow-lg w-full max-w-md p-6 relative">
+        <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm flex items-center justify-center z-50 p-4 transition-all">
+          <div className="bg-white rounded-2xl shadow-xl border border-slate-100 w-full max-w-md p-6 relative animate-in fade-in zoom-in-95 duration-200">
             {/* Botón de cerrar */}
             <button
               onClick={() => setEditTurno(false)}
-              className="absolute top-3 right-3 text-gray-500 hover:text-gray-700"
+              className="absolute top-4 right-4 text-slate-400 hover:text-slate-600 transition-colors p-1 rounded-lg hover:bg-slate-50"
             >
-              ✕
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+              </svg>
             </button>
 
-            <h2 className="text-xl font-bold mb-4 text-center">
-              ➕ Editar Turno
-            </h2>
+            <div className="mb-5 border-b border-slate-100 pb-3">
+              <h2 className="text-lg font-black text-slate-800 tracking-tight">
+                Modificar Turno
+              </h2>
+              <p className="text-slate-400 text-xs font-medium mt-0.5">
+                Actualice los datos o cambie el estado del turno
+              </p>
+            </div>
 
             <form
               onSubmit={(e) => editarTurno(e, turnoEditado.id)}
               className="space-y-4"
             >
-              <div>
-                <label className="block text-sm font-medium text-gray-700">
+              <div className="space-y-1.5">
+                <label
+                  htmlFor="paciente"
+                  className="text-xs font-bold text-slate-500 uppercase tracking-wider"
+                >
                   Paciente
                 </label>
                 <input
@@ -250,13 +301,16 @@ const Turnos = () => {
                   onChange={handleChangeEdit}
                   type="text"
                   placeholder="Nombre del paciente"
-                  className="w-full border rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                  className="w-full px-4 py-2.5 text-sm bg-slate-50 focus:bg-white border border-slate-200 focus:border-blue-500 rounded-xl focus:ring-4 focus:ring-blue-500/10 transition-all outline-none font-medium text-slate-800 placeholder-slate-400"
                   required
                 />
               </div>
 
-              <div>
-                <label className="mb-1 text-sm font-medium text-gray-700">
+              <div className="space-y-1.5">
+                <label
+                  htmlFor="fecha"
+                  className="text-xs font-bold text-slate-500 uppercase tracking-wider"
+                >
                   Fecha
                 </label>
                 <input
@@ -265,15 +319,17 @@ const Turnos = () => {
                   value={turnoEditado.fecha}
                   onChange={handleChangeEdit}
                   type="date"
-                  className="w-full appearance-none border border-gray-300 rounded-lg p-2 pl-10 
-                 bg-white text-gray-700 shadow-sm "
-                  min={new Date().toISOString().split("T")[0]} // evita fechas pasadas
+                  className="w-full px-4 py-2.5 text-sm bg-slate-50 focus:bg-white border border-slate-200 focus:border-blue-500 rounded-xl focus:ring-4 focus:ring-blue-500/10 transition-all outline-none font-semibold text-slate-700 cursor-pointer"
+                  min={new Date().toISOString().split("T")[0]}
                   required
                 />
               </div>
 
-              <div>
-                <label className="block text-sm font-medium text-gray-700">
+              <div className="space-y-1.5">
+                <label
+                  htmlFor="hora"
+                  className="text-xs font-bold text-slate-500 uppercase tracking-wider"
+                >
                   Hora
                 </label>
                 <input
@@ -282,23 +338,27 @@ const Turnos = () => {
                   value={turnoEditado.hora}
                   onChange={handleChangeEdit}
                   type="time"
-                  className="w-full border rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                  className="w-full px-4 py-2.5 text-sm bg-slate-50 focus:bg-white border border-slate-200 focus:border-blue-500 rounded-xl focus:ring-4 focus:ring-blue-500/10 transition-all outline-none font-semibold text-slate-700 cursor-pointer"
                   required
                 />
               </div>
 
-              <div>
-                <label className="block text-sm font-medium text-gray-700">
-                  Estado
+              <div className="space-y-1.5">
+                <label
+                  htmlFor="estado"
+                  className="text-xs font-bold text-slate-500 uppercase tracking-wider"
+                >
+                  Estado del Turno
                 </label>
                 <select
                   name="estado"
                   id="estado"
                   value={turnoEditado.estado}
                   onChange={handleChangeEdit}
-                  className="w-full border rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                  className="w-full px-4 py-2.5 text-sm bg-slate-50 focus:bg-white border border-slate-200 focus:border-blue-500 rounded-xl focus:ring-4 focus:ring-blue-500/10 transition-all outline-none font-semibold text-slate-700 cursor-pointer"
                   required
                 >
+                  <option value="Pendiente">Pendiente</option>
                   <option value="Realizado">Realizado</option>
                   <option value="Cancelado">Cancelado</option>
                   <option value="Reprogramado">Reprogramado</option>
@@ -307,159 +367,225 @@ const Turnos = () => {
 
               <button
                 type="submit"
-                className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition"
+                disabled={cargando}
+                className={`w-full inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-xl text-xs font-bold text-white transition-all shadow-md active:scale-[0.99] ${
+                  cargando
+                    ? "bg-slate-300 text-slate-500 cursor-not-allowed shadow-none"
+                    : "bg-blue-600 hover:bg-blue-700 shadow-blue-100"
+                }`}
               >
-                {cargando ? "Editando.." : "Confirmar cambios"}
+                {cargando ? "Guardando..." : "Confirmar Cambios"}
               </button>
             </form>
           </div>
         </div>
       ) : null}
 
-      <div className=" p-2 lg:p-6">
-        {/*Btn Crear Turno*/}
-        <div className="block lg:flex justify-between mb-4">
-          <h1 className="text-2xl font-bold mb-4">📋 Dashboard de Turnos</h1>
+      {/* --- MAIN CONTENT: DASHBOARD DE TURNOS --- */}
+      <div className="p-4 md:p-6 max-w-7xl mx-auto">
+        {/* Header del Dashboard */}
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6 pb-4 border-b border-slate-100">
+          <div>
+            <h1 className="text-2xl font-black text-slate-800 tracking-tight">
+              Dashboard de Turnos
+            </h1>
+            <p className="text-slate-400 text-xs font-medium mt-0.5">
+              Gestione las citas y estados de atención médica diaria
+            </p>
+          </div>
           <button
             onClick={() => setCrearTurno(true)}
-            className="p-2 mt-5 mb-5 lg:mb-0 lg:mt-0 bg-indigo-700 px-4 text-white rounded-md hover:bg-indigo-600"
+            className="inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold rounded-xl shadow-md shadow-blue-100 active:scale-[0.98] transition-all self-start sm:self-center"
           >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="3"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <line x1="12" y1="5" x2="12" y2="19"></line>
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+            </svg>
             Agendar Turno
           </button>
         </div>
 
-        <div className="flex flex-wrap gap-4 mb-4">
+        {/* Filtros por Estado (Pills estilo Apple/Clean) */}
+        <div className="flex flex-wrap gap-2 mb-6 bg-slate-100/70 p-1.5 rounded-2xl w-auto inline-flex">
           {["Pendiente", "Realizado", "Cancelado", "Reprogramado"].map(
             (estado) => (
               <button
                 key={estado}
                 onClick={() => setEstadoActivo(estado)}
-                className={`px-4 py-2 rounded-full ${
+                className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${
                   estadoActivo === estado
-                    ? "bg-blue-600 text-white"
-                    : "bg-gray-200"
+                    ? "bg-white text-slate-800 shadow-sm"
+                    : "text-slate-500 hover:text-slate-800"
                 }`}
               >
                 {estado}
               </button>
-            )
+            ),
           )}
         </div>
 
-        {/* Resumen */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-          <div className="bg-white p-4 rounded-2xl shadow">
-            <h2 className="text-lg font-semibold">
-              {" "}
+        {/* Tarjetas de Resumen Numérico */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+          <div className="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm">
+            <h2 className="text-xs font-bold text-slate-400 uppercase tracking-wider">
               Total {estadoActivo || "Turnos"}
             </h2>
-            <p className="text-3xl font-bold text-blue-600">
+            <p className="text-3xl font-black text-blue-600 mt-1">
               {turnos.filter((turno) => turno.estado === estadoActivo).length}
             </p>
           </div>
-          <div className="bg-white p-4 rounded-2xl shadow">
-            <h2 className="text-lg font-semibold">Próximo turno</h2>
-            <p className="text-gray-700">
+
+          <div className="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm">
+            <h2 className="text-xs font-bold text-slate-400 uppercase tracking-wider">
+              Próximo Turno
+            </h2>
+            <p className="text-base font-bold text-slate-700 mt-2 truncate">
               {turnos.length > 0
-                ? `${turnos[0].paciente} - ${turnos[0].hora.slice(0, 5)}`
-                : "Sin turnos"}
+                ? `${turnos[0].paciente} (${turnos[0].hora.slice(0, 5)} hs)`
+                : "Sin turnos registrados"}
             </p>
           </div>
-          <div className="bg-white p-4 rounded-2xl shadow">
-            <h2 className="text-lg font-semibold">Fecha</h2>
-            <p className="text-gray-700">
-              {new Date().toLocaleDateString("es-AR")}
+
+          <div className="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm sm:col-span-2 lg:col-span-1">
+            <h2 className="text-xs font-bold text-slate-400 uppercase tracking-wider">
+              Fecha Actual
+            </h2>
+            <p className="text-base font-bold text-slate-700 mt-2">
+              {new Date().toLocaleDateString("es-AR", {
+                weekday: "long",
+                day: "numeric",
+                month: "short",
+              })}
             </p>
           </div>
         </div>
 
-        {/* Tabla */}
-        <div className="bg-white rounded-2xl shadow overflow-hidden">
-          <table className="min-w-full text-sm text-left">
-            <thead className="bg-gray-100">
-              <tr>
-                <th className="px-4 py-2">Paciente</th>
-                <th className="px-4 py-2">Fecha</th>
-                <th className="px-4 py-2">Hora</th>
-                <th className="px-4 py-2">Estado</th>
-                <th className="px-4 py-2"></th>
-              </tr>
-            </thead>
-            <tbody>
-              {loading ? (
-                <tr>
-                  <td
-                    colSpan="4"
-                    className="px-4 py-4 text-center text-gray-500"
-                  >
-                    Cargando turnos...
-                  </td>
+        {/* Tabla de Gestión */}
+        <div className="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm text-left border-collapse">
+              <thead>
+                <tr className="bg-slate-50/70 border-b border-slate-100 text-xs font-bold text-slate-400 uppercase tracking-wider">
+                  <th className="px-6 py-3.5">Paciente</th>
+                  <th className="px-6 py-3.5">Fecha</th>
+                  <th className="px-6 py-3.5">Hora</th>
+                  <th className="px-6 py-3.5">Estado</th>
+                  <th className="px-6 py-3.5 text-right">Acciones</th>
                 </tr>
-              ) : turnos.length === 0 ? (
-                <tr>
-                  <td
-                    colSpan="4"
-                    className="px-4 py-4 text-center text-gray-500"
-                  >
-                    No hay turnos pendientes
-                  </td>
-                </tr>
-              ) : (
-                turnos
-                  .filter((t) => t.estado == estadoActivo)
-                  .map((turno) => (
-                    <tr
-                      key={turno.id}
-                      className="border-b hover:bg-gray-50 transition"
+              </thead>
+              <tbody className="divide-y divide-slate-100 font-medium text-slate-700">
+                {loading ? (
+                  <tr>
+                    <td
+                      colSpan="5"
+                      className="px-6 py-10 text-center text-slate-400 text-xs font-bold"
                     >
-                      <td className="px-4 py-2 capitalize">{turno.paciente}</td>
-                      <td className="px-4 py-2">
-                        {turno.fecha.split("-").reverse().join("-")}
-                      </td>
-                      <td className="px-4 py-2">{turno.hora.slice(0, 5)}</td>
-                      <td className="px-4 py-2">
-                        <span
-                          className={`px-2 py-1 rounded-full text-xs font-semibold ${
-                            turno.estado === "Pendiente"
-                              ? "bg-yellow-200 text-yellow-800"
-                              : turno.estado === "Realizado"
-                              ? "bg-green-200 text-green-800"
-                              : turno.estado === "Cancelado"
-                              ? "bg-red-200 text-red-800"
-                              : turno.estado === "Reprogramado"
-                              ? "bg-blue-200 text-gray-800"
-                              : "bg-gray-200 text-gray-800"
-                          }`}
-                        >
-                          {" "}
-                          {turno.estado}
-                        </span>
-                      </td>
-                      <td className="px-4 py-2">
+                      <div className="flex items-center justify-center gap-2">
                         <svg
-                          onClick={() => handleEdit(turno.id)}
+                          className="animate-spin h-4 w-4 text-blue-500"
                           xmlns="http://www.w3.org/2000/svg"
-                          width="24"
-                          height="24"
-                          viewBox="0 0 24 24"
                           fill="none"
-                          stroke="currentColor"
-                          stroke-width="2"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          className="icon icon-tabler icons-tabler-outline icon-tabler-pencil-minus hover:cursor-pointer hover:stroke-cyan-600"
+                          viewBox="0 0 24 24"
                         >
-                          <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                          <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
-                          <path d="M13.5 6.5l4 4" />
-                          <path d="M16 19h6" />
+                          <circle
+                            className="opacity-25"
+                            cx="12"
+                            cy="12"
+                            r="10"
+                            stroke="currentColor"
+                            strokeWidth="4"
+                          />
+                          <path
+                            className="opacity-75"
+                            fill="currentColor"
+                            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                          />
                         </svg>
-                      </td>
-                    </tr>
-                  ))
-              )}
-            </tbody>
-          </table>
+                        Cargando hoja de turnos...
+                      </div>
+                    </td>
+                  </tr>
+                ) : turnos.filter((t) => t.estado === estadoActivo).length ===
+                  0 ? (
+                  <tr>
+                    <td
+                      colSpan="5"
+                      className="px-6 py-10 text-center text-slate-400 text-xs font-semibold"
+                    >
+                      No hay turnos registrados en estado{" "}
+                      <span className="font-bold">"{estadoActivo}"</span>
+                    </td>
+                  </tr>
+                ) : (
+                  turnos
+                    .filter((t) => t.estado === estadoActivo)
+                    .map((turno) => (
+                      <tr
+                        key={turno.id}
+                        className="hover:bg-slate-50/50 transition-colors group"
+                      >
+                        <td className="px-6 py-3.5 font-bold text-slate-800 capitalize">
+                          {turno.paciente}
+                        </td>
+                        <td className="px-6 py-3.5 text-slate-500">
+                          {turno.fecha.split("-").reverse().join("/")}
+                        </td>
+                        <td className="px-6 py-3.5 text-slate-600 font-semibold">
+                          {turno.hora.slice(0, 5)} hs
+                        </td>
+                        <td className="px-6 py-3.5">
+                          <span
+                            className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-bold tracking-wide uppercase ${
+                              turno.estado === "Pendiente"
+                                ? "bg-amber-50 text-amber-700 border border-amber-100"
+                                : turno.estado === "Realizado"
+                                  ? "bg-emerald-50 text-emerald-700 border border-emerald-100"
+                                  : turno.estado === "Cancelado"
+                                    ? "bg-rose-50 text-rose-700 border border-rose-100"
+                                    : "bg-slate-100 text-slate-600 border border-slate-200"
+                            }`}
+                          >
+                            {turno.estado}
+                          </span>
+                        </td>
+                        <td className="px-6 py-3.5 text-right">
+                          <button
+                            onClick={() => handleEdit(turno.id)}
+                            className="inline-flex items-center justify-center p-2 rounded-xl text-slate-400 hover:text-blue-600 hover:bg-blue-50 transition-all"
+                            title="Editar turno"
+                          >
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="16"
+                              height="16"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              strokeWidth="2.5"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                            >
+                              <path d="M12 20h9" />
+                              <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" />
+                            </svg>
+                          </button>
+                        </td>
+                      </tr>
+                    ))
+                )}
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </>

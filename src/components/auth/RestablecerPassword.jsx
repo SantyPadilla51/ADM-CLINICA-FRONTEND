@@ -30,7 +30,7 @@ const RestablecerPassword = () => {
         { email },
         {
           headers: { "Content-Type": "application/json" },
-        }
+        },
       );
 
       if (data.ok === true) {
@@ -42,14 +42,14 @@ const RestablecerPassword = () => {
         }, 3000);
       } else {
         toast.error(
-          "Hubo un error al enviar el correo electrónico. Por favor, inténtelo más tarde."
+          "Hubo un error al enviar el correo electrónico. Por favor, inténtelo más tarde.",
         );
         setCargando(false);
         return;
       }
     } catch (error) {
       toast.error(
-        "Hubo un error al enviar el correo electrónico. Por favor, inténtelo más tarde."
+        "Hubo un error al enviar el correo electrónico. Por favor, inténtelo más tarde.",
       );
       setCargando(false);
       return;
@@ -69,43 +69,90 @@ const RestablecerPassword = () => {
       <Navbar />
       <BtnVolver onClick={handleNavigate} />
 
-      <div className="min-h-screen flex items-center justify-center bg-gray-100">
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 to-slate-100 p-4">
         <form
-          className="-mt-36 mx-4 drop-shadow-lg bg-white flex flex-col p-6 gap-4 rounded-lg lg:w-1/3 lg:mx-auto border border-gray-200"
           onSubmit={handleSubmit}
+          className="w-full max-w-md bg-white rounded-2xl shadow-xl border border-slate-100 p-6 md:p-8 space-y-5 -mt-20 animate-in fade-in zoom-in-95 duration-200"
         >
-          <h1 className="text-2xl font-semibold text-gray-800 text-center">
-            Restablece tu Contraseña
-          </h1>
-          <p className="text-gray-600 text-center">
-            Ingresa tu correo para recibir instrucciones de restablecimiento
-          </p>
+          {/* Encabezado e Ícono */}
+          <div className="text-center">
+            <div className="w-12 h-12 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center mx-auto mb-4">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="22"
+                height="22"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+              </svg>
+            </div>
+            <h1 className="text-xl font-black text-slate-800 tracking-tight">
+              Restablecer Contraseña
+            </h1>
+            <p className="text-slate-400 text-xs font-medium mt-1.5 px-4 leading-relaxed">
+              Ingresá tu correo electrónico para recibir las instrucciones de
+              recuperación
+            </p>
+          </div>
 
-          <div className="flex flex-col gap-2">
-            <label className="text-gray-700 font-medium">
+          {/* Campo: Email */}
+          <div className="flex flex-col space-y-1.5">
+            <label
+              htmlFor="email"
+              className="text-xs font-bold text-slate-500 uppercase tracking-wider"
+            >
               Correo electrónico
             </label>
             <input
-              className="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+              id="email"
               type="email"
               name="email"
               placeholder="ejemplo@correo.com"
               onChange={handleChange}
               required
+              className="w-full px-4 py-2.5 text-sm bg-slate-50 focus:bg-white border border-slate-200 focus:border-blue-500 rounded-xl focus:ring-4 focus:ring-blue-500/10 transition-all outline-none font-medium text-slate-800 placeholder-slate-400"
+              autoComplete="email"
             />
           </div>
 
-          <button
-            className="bg-blue-600 text-white p-2 rounded-md hover:bg-blue-500 transition-all flex items-center justify-center mt-4"
-            type="submit"
-            disabled={cargando}
-          >
-            {cargando ? (
-              <ClipLoader color={"#fff"} size={20} />
-            ) : (
-              "Enviar Instrucciones"
-            )}
-          </button>
+          {/* Botón de Envío */}
+          <div className="pt-2">
+            <button
+              type="submit"
+              disabled={cargando}
+              className={`w-full inline-flex items-center justify-center h-11 rounded-xl text-xs font-bold text-white transition-all shadow-md active:scale-[0.99] ${
+                cargando
+                  ? "bg-slate-300 text-slate-500 cursor-not-allowed shadow-none"
+                  : "bg-blue-600 hover:bg-blue-700 shadow-blue-100"
+              }`}
+            >
+              {cargando ? (
+                <div className="flex items-center gap-2">
+                  <ClipLoader color={"#fff"} size={18} />
+                  <span>Enviando...</span>
+                </div>
+              ) : (
+                "Enviar Instrucciones"
+              )}
+            </button>
+          </div>
+
+          {/* Enlace de retorno opcional (mejora de flujo UX) */}
+          <div className="text-center pt-2">
+            <button
+              type="button"
+              onClick={() => window.history.back()} // O la lógica de navegación que uses
+              className="text-xs font-bold text-slate-400 hover:text-slate-600 transition-colors"
+            >
+              Volver al inicio de sesión
+            </button>
+          </div>
         </form>
       </div>
     </>
