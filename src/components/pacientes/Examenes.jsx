@@ -19,10 +19,14 @@ const Examenes = ({ pacienteID }) => {
 
   const getExamenes = async () => {
     const token = localStorage.getItem("token");
+
     const url = `/pacientes/examenes/${pacienteID}`;
-    const { data } = await clienteAxios.get(url, {
+
+    const config = {
       headers: { Authorization: `Bearer ${token}` },
-    });
+    };
+
+    const { data } = await clienteAxios.get(url, config);
 
     setExamenes(data.examenes);
   };
@@ -53,46 +57,49 @@ const Examenes = ({ pacienteID }) => {
         },
       );
 
-      if (data.ok == true) {
+      if (data.ok === true) {
         toast.success("Examen eliminado correctamente");
-        getExamenes();
         setCargando(false);
         setEliminando(false);
+        setCargandoEliminar(false);
+        getExamenes();
         return;
       }
     } catch (error) {
       toast.error("Error al eliminar el examen");
+      setCargandoEliminar(false);
+      setCargando(false);
+      setEliminando(false);
     }
-    setCargandoEliminar(false);
-    setEliminando(false);
-    setCargando(false);
   };
 
   const createExamen = async (e) => {
     e.preventDefault();
     setCargando(true);
-    if (nuevoExamen.imagen === "") {
+    if (nuevoExamen.imagenUrl === "") {
       toast.error("Por favor, sube una imagen del examen");
       setCargando(false);
       return;
     }
 
     try {
-      const file = nuevoExamen.imagen;
-
+      const file = nuevoExamen.imagenUrl;
       const fileName = `${Date.now()}_${file.name}`;
 
       const { data, error } = await supabase.storage
         .from("examenes")
         .upload(`imagenes/${fileName}`, file);
 
-      console.log(data);
+      if (error) {
+        console.error("-> Error en la subida de Supabase:", error.message);
+        return;
+      }
 
-      const { data: publicUrlData } = supabase.storage
+      const resultadoUrl = supabase.storage
         .from("examenes")
         .getPublicUrl(`imagenes/${fileName}`);
 
-      const urlImagen = publicUrlData.publicUrl;
+      const urlImagen = resultadoUrl.data?.publicUrl || resultadoUrl.publicUrl;
 
       const examenPayload = {
         descripcion: nuevoExamen.descripcion,
@@ -100,26 +107,39 @@ const Examenes = ({ pacienteID }) => {
         imagenUrl: urlImagen,
       };
 
-      console.log(examenPayload);
-
       const token = localStorage.getItem("token");
-      await clienteAxios.post(
-        `/pacientes/examenes/${pacienteID}`,
-        examenPayload,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+      const url = `/pacientes/examenes/${pacienteID}`;
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
-      );
+      };
 
-      toast.success("Examen creado correctamente");
-      setNuevoExamen("");
-      setAddExamen(false);
-      setCargando(false);
+      const res = await clienteAxios.post(url, examenPayload, config);
+
+      const message = res.data.msg;
+
+      if (res.data.ok === true) {
+        toast.success(message, {
+          position: "top-right",
+        });
+      } else {
+        toast.error(message, {
+          position: "top-right",
+        });
+      }
+
+      setNuevoExamen({
+        pacienteId: pacienteID,
+        descripcion: "",
+        imagenUrl: "",
+      });
+
       getExamenes();
-    } catch (error) {
-      toast.error("Error al subir el examen");
+      setAddExamen(null);
+    } catch (err) {
+      console.error("Error:", err);
     } finally {
       setCargando(false);
     }
@@ -134,7 +154,6 @@ const Examenes = ({ pacienteID }) => {
       {addExamen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm animate-fade-in">
           <div className="relative bg-white rounded-2xl border border-slate-100 shadow-xl w-full max-w-md overflow-hidden transform transition-all">
-            {/* Cabecera Modal */}
             <div className="bg-slate-50 px-6 py-4 border-b border-slate-100 flex justify-between items-center">
               <div className="flex items-center gap-2">
                 <svg
@@ -176,13 +195,11 @@ const Examenes = ({ pacienteID }) => {
               </button>
             </div>
 
-            {/* Formulario */}
             <form
               onSubmit={createExamen}
               encType="multipart/form-data"
               className="p-6 space-y-5"
             >
-              {/* Descripción */}
               <div className="space-y-1.5">
                 <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">
                   Descripción del Examen
@@ -202,7 +219,6 @@ const Examenes = ({ pacienteID }) => {
                 />
               </div>
 
-              {/* Input de Archivo Estilizado */}
               <div className="space-y-1.5">
                 <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">
                   Documento / Imagen del Estudio
@@ -214,7 +230,7 @@ const Examenes = ({ pacienteID }) => {
                     onChange={(e) =>
                       setNuevoExamen({
                         ...nuevoExamen,
-                        imagen: e.target.files[0],
+                        imagenUrl: e.target.files[0],
                       })
                     }
                     className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
@@ -240,9 +256,9 @@ const Examenes = ({ pacienteID }) => {
                       />
                     </svg>
                     <div className="text-xs text-slate-600 font-medium">
-                      {nuevoExamen.imagen ? (
+                      {nuevoExamen.imagenUrl ? (
                         <span className="text-blue-600 font-bold block truncate max-w-[280px] mx-auto">
-                          ✓ {nuevoExamen.imagen.name}
+                          ✓ {nuevoExamen.imagenUrl.name}
                         </span>
                       ) : (
                         <span>
@@ -257,7 +273,6 @@ const Examenes = ({ pacienteID }) => {
                 </div>
               </div>
 
-              {/* Acciones */}
               <div className="pt-2">
                 <button
                   type="submit"
@@ -276,7 +291,6 @@ const Examenes = ({ pacienteID }) => {
         </div>
       )}
 
-      {/* MODAL GLOBAL DE ELIMINACIÓN (Optimizado fuera del loop) */}
       {eliminando && examenSeleccionado && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm">
           <div className="p-6 bg-white rounded-2xl shadow-xl max-w-sm w-full border border-slate-100">
@@ -332,7 +346,6 @@ const Examenes = ({ pacienteID }) => {
         </div>
       )}
 
-      {/* SECCIÓN PRINCIPAL: HISTORIAL DE EXÁMENES */}
       <section className="p-4 md:p-6 row-start-1">
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6 pb-4 border-b border-slate-100">
           <div>
@@ -392,14 +405,12 @@ const Examenes = ({ pacienteID }) => {
               </p>
             </div>
           ) : (
-            /* Grilla de Tarjetas Médicas */
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
               {examenes.map((examen, index) => (
                 <div
-                  key={examen.id || index} // Corrección estructural de la Key
+                  key={examen.id || index}
                   className="group relative bg-white border border-slate-100 rounded-2xl shadow-sm hover:shadow-md transition-all duration-200 overflow-hidden flex flex-col justify-between"
                 >
-                  {/* Botón Eliminar contextual */}
                   <button
                     onClick={() => handleEliminar(examen)}
                     className="absolute right-2 top-2 z-20 p-2 rounded-xl text-slate-400 hover:text-red-600 bg-white/80 hover:bg-red-50 backdrop-blur-sm opacity-0 group-hover:opacity-100 focus:opacity-100 transition-all duration-150 border border-slate-100"
@@ -421,7 +432,6 @@ const Examenes = ({ pacienteID }) => {
                     </svg>
                   </button>
 
-                  {/* Previsualización Controlada de la Imagen Médica */}
                   <div className="relative w-full h-44 bg-slate-900 overflow-hidden flex items-center justify-center border-b border-slate-100">
                     <div className="absolute inset-0 bg-slate-900/5 group-hover:bg-transparent z-10 transition-colors" />
                     <img
@@ -432,7 +442,6 @@ const Examenes = ({ pacienteID }) => {
                     />
                   </div>
 
-                  {/* Textos informativos de la tarjeta */}
                   <div className="p-4 space-y-3 bg-white">
                     <div className="space-y-1">
                       <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1">
@@ -460,7 +469,6 @@ const Examenes = ({ pacienteID }) => {
                       </p>
                     </div>
 
-                    {/* Accionador: Ver a tamaño completo */}
                     <a
                       href={examen.imagenUrl}
                       target="_blank"

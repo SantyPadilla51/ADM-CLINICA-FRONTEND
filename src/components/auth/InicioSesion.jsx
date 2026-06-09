@@ -18,8 +18,6 @@ const InicioSesion = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const toastId = toast.loading("Iniciando Sesion...");
-
     if (datos.email === "" || datos.password === "") {
       toast.error("Todos los campos son obligatorios");
       return;
@@ -34,8 +32,9 @@ const InicioSesion = () => {
         });
 
         if (data.ok != true) {
-          toast.update(toastId, {
-            render: data.msg,
+          toast.error({
+            render:
+              error.response?.data?.msg || "Hubo un error al iniciar sesión",
             type: "error",
             isLoading: false,
             autoClose: 2000,
@@ -43,21 +42,17 @@ const InicioSesion = () => {
           setCargando(false);
           return;
         } else {
-          toast.update(toastId, {
-            render: "Inicio de sesión exitoso",
-            type: "success",
-            isLoading: false,
-            autoClose: 2000,
-          });
           setCargando(false);
           setAuth(data);
+
           localStorage.setItem("token", data.token);
+
           setTimeout(() => {
             navigate("/admin/pacientes");
           }, 1000);
         }
       } catch (error) {
-        toast.update(toastId, {
+        toast.error({
           render:
             error.response?.data?.msg || "Hubo un error al iniciar sesión",
           type: "error",
@@ -77,11 +72,9 @@ const InicioSesion = () => {
     <>
       <section className="min-h-screen grid grid-cols-1 lg:grid-cols-12 bg-slate-50 antialiased font-sans">
         <div className="hidden lg:flex lg:col-span-7 bg-gradient-to-br from-blue-700 via-blue-600 to-teal-600 p-12 flex-col justify-between relative overflow-hidden">
-          {/* Decoración geométrica abstracta de fondo */}
           <div className="absolute top-0 right-0 -mt-12 -mr-12 w-96 h-96 bg-white/10 rounded-full blur-3xl" />
           <div className="absolute bottom-0 left-0 -mb-20 -ml-20 w-80 h-80 bg-teal-400/20 rounded-full blur-2xl" />
 
-          {/* Logo de la Clínica / Nombre */}
           <div className="flex items-center gap-3 text-white relative z-10">
             <div className="w-10 h-10 bg-white/20 backdrop-blur-md rounded-xl flex items-center justify-center border border-white/20">
               <svg
@@ -104,7 +97,6 @@ const InicioSesion = () => {
             </span>
           </div>
 
-          {/* Texto Principal */}
           <div className="max-w-xl relative z-10 my-auto">
             <span className="bg-white/10 text-teal-200 text-xs font-semibold px-3 py-1 rounded-full uppercase tracking-wider backdrop-blur-sm">
               Sistema de Gestión Médica
@@ -119,7 +111,6 @@ const InicioSesion = () => {
             </p>
           </div>
 
-          {/* Footer de la sección izquierda */}
           <div className="text-xs text-blue-200/70 relative z-10">
             © {new Date().getFullYear()} Doc Panel. Todos los derechos
             reservados.

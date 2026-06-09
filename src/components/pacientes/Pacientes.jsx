@@ -4,12 +4,14 @@ import { toast } from "react-toastify";
 import clienteAxios from "../../config/axios";
 import NavbarAdmin from "../navbar/NavbarAdmin";
 import "react-toastify/dist/ReactToastify.css";
+import { BarLoader } from "react-spinners";
 
 const Pacientes = () => {
   const navigate = useNavigate();
   const [buscador, setBuscador] = useState("");
   const [pacientes, setPacientes] = useState([]);
   const [pacienteParticular, setPacienteParticular] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const buscarPaciente = async (e) => {
     e.preventDefault();
@@ -30,17 +32,27 @@ const Pacientes = () => {
   };
 
   const obtenerPacientes = async () => {
+    setLoading(true);
+
     try {
       const token = localStorage.getItem("token");
       const url = "/pacientes";
-      const { data } = await clienteAxios.get(url, {
+
+      const delay = new Promise((resolve) => setTimeout(resolve, 1500));
+
+      const peticionAxios = clienteAxios.get(url, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
-      setPacientes(data);
+
+      const [respuestaAxios] = await Promise.all([peticionAxios, delay]);
+
+      setPacientes(respuestaAxios.data);
+      setLoading(false);
     } catch (error) {
-      toast.error("Hubo un error");
+      setLoading(false);
+      toast.error("Hubo un error al obtener los pacientes");
     }
   };
 
@@ -183,61 +195,108 @@ const Pacientes = () => {
         </div>
       </div>
 
+      {!pacientes ? <BarLoader /> : null}
+
       <div className=" md:grid md:grid-cols-3 lg:grid lg:grid-cols-5 gap-4 m-8">
         {pacienteParticular ? (
           <div
-            className="bg-white flex flex-col gap-10 p-2 rounded-md"
             key={pacienteParticular.id}
+            className="bg-white rounded-2xl border border-slate-100 shadow-sm hover:shadow-md hover:border-blue-100 transition-all duration-200 p-5 flex flex-col justify-between gap-6 relative overflow-hidden group"
           >
-            <div className="flex flex-col gap-2">
-              <p className="font-semibold">
-                Nombre:{" "}
-                <span className="text-black font-normal">
-                  {pacienteParticular.nombre}
-                </span>
-              </p>
-              <p className="font-semibold">
-                Apellido:{" "}
-                <span className="font-normal">
-                  {pacienteParticular.apellido}
-                </span>
-              </p>
-              <p className="font-semibold">
-                Edad:{" "}
-                <span className="text-black font-normal">
-                  {pacienteParticular.edad}
-                </span>
-              </p>
-              <p className="font-semibold">
-                Sexo:{" "}
-                <span className="text-black font-normal">
-                  {pacienteParticular.sexo}
-                </span>
-              </p>
-              <p className="font-semibold">
-                Telefono:{" "}
-                <span className="text-black font-normal">
-                  {pacienteParticular.telefono}
-                </span>
-              </p>
-              <p className="font-semibold">
-                DNI:{" "}
-                <span className="text-black font-normal">
-                  {pacienteParticular.dni}
-                </span>
-              </p>
+            <div className="space-y-4">
+              <div className="flex items-center gap-3.5">
+                <div className="w-11 h-11 rounded-xl bg-blue-50 text-blue-600 font-bold text-sm flex items-center justify-center uppercase tracking-wider shrink-0">
+                  {pacienteParticular.nombre[0]}
+                  {pacienteParticular.apellido[0]}
+                </div>
+                <div className="overflow-hidden">
+                  <h3 className="font-bold text-gray-900 text-lg leading-snug truncate">
+                    {pacienteParticular.nombre} {pacienteParticular.apellido}
+                  </h3>
+
+                  <span
+                    className={`inline-flex items-center px-2 py-0.5 mt-1 rounded-md text-xs font-medium ${
+                      pacienteParticular.sexo?.toLowerCase() === "femenino" ||
+                      pacienteParticular.sexo?.toLowerCase() === "f"
+                        ? "bg-pink-50 text-pink-700 border border-pink-100"
+                        : "bg-blue-50 text-blue-700 border border-blue-100"
+                    }`}
+                  >
+                    {pacienteParticular.sexo}
+                  </span>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-x-4 gap-y-3 pt-2 border-t border-slate-50 text-sm">
+                <div>
+                  <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
+                    Edad
+                  </p>
+                  <p className="font-medium text-slate-800 mt-0.5">
+                    {pacienteParticular.edad} años
+                  </p>
+                </div>
+                <div>
+                  <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
+                    DNI
+                  </p>
+                  <p className="font-medium text-slate-800 mt-0.5 tracking-wide">
+                    {pacienteParticular.dni}
+                  </p>
+                </div>
+                <div className="col-span-2">
+                  <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
+                    Teléfono
+                  </p>
+                  <p className="font-medium text-slate-700 mt-0.5 flex items-center gap-1.5">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth={2}
+                      stroke="currentColor"
+                      className="w-3.5 h-3.5 text-slate-400"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M10.5 1.5H8.25A2.25 2.25 0 0 0 6 3.75v16.5a2.25 2.25 0 0 0 2.25 2.25h7.5A2.25 2.25 0 0 0 18 20.25V3.75a2.25 2.25 0 0 0-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3m-3 18.75h3"
+                      />
+                    </svg>
+                    {pacienteParticular.telefono || "No registrado"}
+                  </p>
+                </div>
+              </div>
             </div>
 
-            <div className="flex flex-col gap-2">
+            <div className="pt-2">
               <button
-                className="rounded bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4"
+                className="w-full bg-slate-50 hover:bg-blue-600 text-slate-700 hover:text-white text-xs font-bold py-2.5 px-4 rounded-xl border border-slate-200/60 hover:border-blue-600 shadow-sm transition-all duration-200 flex items-center justify-center gap-2 group/btn"
                 onClick={() =>
                   navigate(`perfilPaciente/${pacienteParticular.id}`)
                 }
               >
-                Ver Paciente
+                Ver Ficha Médica
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={2.5}
+                  stroke="currentColor"
+                  className="w-3.5 h-3.5 transform group-hover/btn:translate-x-1 transition-transform"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3"
+                  />
+                </svg>
               </button>
             </div>
+          </div>
+        ) : loading ? (
+          <div className="mx-auto col-start-1 col-end-6 mt-10">
+            <BarLoader width={300} color="#3e43a8" />{" "}
           </div>
         ) : pacientes.length === 0 ? (
           <div className="col-start-2 col-end-5 flex flex-col items-center justify-center p-8 bg-slate-50/60 rounded-2xl border border-dashed border-slate-200/80 text-center animate-in fade-in duration-200">

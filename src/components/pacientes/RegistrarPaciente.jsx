@@ -101,7 +101,6 @@ const RegistrarPaciente = () => {
           onSubmit={handleSubmit}
           className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-5"
         >
-          {/* Campo: Nombre */}
           <div className="space-y-1.5">
             <label
               htmlFor="nombre"
@@ -121,7 +120,6 @@ const RegistrarPaciente = () => {
             />
           </div>
 
-          {/* Campo: Apellido */}
           <div className="space-y-1.5">
             <label
               htmlFor="apellido"
@@ -141,7 +139,6 @@ const RegistrarPaciente = () => {
             />
           </div>
 
-          {/* Campo: Edad */}
           <div className="space-y-1.5">
             <label
               htmlFor="edad"
@@ -162,7 +159,6 @@ const RegistrarPaciente = () => {
             />
           </div>
 
-          {/* Campo: DNI */}
           <div className="space-y-1.5">
             <label
               htmlFor="dni"
@@ -183,7 +179,6 @@ const RegistrarPaciente = () => {
             />
           </div>
 
-          {/* Campo: Teléfono */}
           <div className="space-y-1.5">
             <label
               htmlFor="telefono"
@@ -203,7 +198,6 @@ const RegistrarPaciente = () => {
             />
           </div>
 
-          {/* Campo: Sexo */}
           <div className="space-y-1.5">
             <label
               htmlFor="sexo"
@@ -225,7 +219,6 @@ const RegistrarPaciente = () => {
             </select>
           </div>
 
-          {/* Campo: Cobertura Médica (Lista Limpia y Normalizada) */}
           <div className="space-y-1.5 md:col-span-2">
             <label
               htmlFor="cobertura"
@@ -242,17 +235,17 @@ const RegistrarPaciente = () => {
             >
               <option value="">Particular / Sin Cobertura</option>
               <option value="osde">OSDE</option>
-              <option value="swiss_medical">Swiss Medical</option>
+              <option value="swiss medical">Swiss Medical</option>
               <option value="galeno">Galeno</option>
               <option value="medicus">Medicus</option>
               <option value="omint">Omint</option>
-              <option value="hospital_italiano">Hospital Italiano</option>
-              <option value="hospital_britanico">
+              <option value="hospital italiano">Hospital Italiano</option>
+              <option value="hospital britanico">
                 Hospital Técnico Británico
               </option>
-              <option value="sancor_salud">Sancor Salud</option>
+              <option value="sancor salud">Sancor Salud</option>
               <option value="medifé">Medifé</option>
-              <option value="accord_salud">Accord Salud</option>
+              <option value="accord salud">Accord Salud</option>
               <option value="osdepyme">OSDEPYME</option>
               <option value="premedic">Premedic</option>
               <option value="asociart">Asociart ART</option>
@@ -265,7 +258,6 @@ const RegistrarPaciente = () => {
             </select>
           </div>
 
-          {/* Campo: Email */}
           <div className="space-y-1.5 md:col-span-2">
             <label
               htmlFor="email"
