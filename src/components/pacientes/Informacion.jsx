@@ -16,7 +16,7 @@ const Informacion = ({ pacienteID }) => {
         },
       });
 
-      setPaciente(data.paciente);
+      setPaciente(data.paciente[0]);
     } catch (error) {
       toast.error("Ha ocurrido un error al obtener el paciente");
     }

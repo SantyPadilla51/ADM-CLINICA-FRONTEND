@@ -34,14 +34,14 @@ const EditarPaciente = () => {
       const { data } = await clienteAxios.get(url, config);
 
       setFormData({
-        nombre: data.paciente.nombre || "",
-        apellido: data.paciente.apellido || "",
-        edad: data.paciente.edad || "",
-        dni: data.paciente.dni || "",
-        sexo: data.paciente.sexo || "",
-        email: data.paciente.email || "",
-        telefono: data.paciente.telefono || "",
-        cobertura: data.paciente.cobertura || "",
+        nombre: data.paciente[0].nombre || "",
+        apellido: data.paciente[0].apellido || "",
+        edad: data.paciente[0].edad || "",
+        dni: data.paciente[0].dni || "",
+        sexo: data.paciente[0].sexo || "",
+        email: data.paciente[0].email || "",
+        telefono: data.paciente[0].telefono || "",
+        cobertura: data.paciente[0].cobertura || "",
       });
     } catch (error) {
       toast.error("Ha ocurrido un error");
